@@ -1,0 +1,138 @@
+<!-- Este reto sí requiere autenticación, se mantiene el script y overlay -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El grupo del turno B · Hospital Saint Anima</title>
+<link rel="stylesheet" href="../../../templates/style.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+  <img src="../../../assets/logo_saint_anima.png" alt="Hospital Saint Anima logo">
+    <div>
+      <h1>Hospital Saint Anima</h1>
+    </div>
+    <div class="meta small">
+      Ref: HSA-CTF-2025<br>
+      Unidad: Planta 4 · Medicina Interna
+    </div>
+  </div>
+
+  <div class="section">
+  <div class="meta"><a class="back" href="../../../intro.html" target="_self">⟵ Volver a Inicio</a></div>
+  </div>
+
+  
+  <div class="notice">
+    <strong>Contexto:</strong> En la sala 203 queda una estación encendida con sesión del turno B; desde ahí se extrae el export del chat interno.
+    <br>
+    <strong>Objetivo:</strong> Identificar al paciente marcado irregularmente y usar su identificador para acceder al sistema de logs del servidor.
+    <br>
+    <details class="hint">
+      <summary>Pista</summary>
+      <div class="hint-body">Lee el chat completo, busca la tabla de pacientes mencionada, identifica al paciente marcado y usa sus datos para acceder al servidor. Los comandos básicos de terminal son: <code>ls</code>, <code>cat [archivo]</code>, <code>help</code>.</div>
+    </details>
+  </div>
+
+<div class="section">
+  <h2>Export chat - Canal: turno-b</h2>
+  <p class="small">Exportación parcial del chat interno (turno B). Revise las líneas marcadas.</p>
+
+  <pre class="code">[2025-10-09 23:42] @marta_admin: ¿Alguien más ha notado que la cafetera de planta 3 otra vez no calienta?
+[2025-10-09 23:43] @aux_javier: Sí, llevo dos turnos con café templado. 😩
+[2025-10-09 23:44] @luis_it: Mañana cambio el termostato. Hoy imposible.
+[2025-10-09 23:45] @miguel_admin: Tabla de estado actualizada (turno B). Dejo la nota en el export.
+[2025-10-09 23:46] @marta_admin: Gracias. Por cierto, la impresora de planta 4 hace líneas.
+[2025-10-09 23:47] @luis_it: Eso es tóner. Agitad el cartucho o esperad a mañana.
+[2025-10-09 23:48] @enf_carlos: Vale, reviso el comentario.
+[2025-10-09 23:49] @miguel_admin: Fíjate en la fila marcada; cruza con órdenes anteriores.
+[2025-10-09 23:51] @recep_teresa: ¿Quién tiene la llave de taquillas? Me han dejado un paquete.
+[2025-10-09 23:52] @marta_admin: La tengo yo, te la bajo en 10.
+[2025-10-09 23:53] @enf_ana: Oye, ¿cómo entro en la consola para ver el estado? Me pide usuario.
+[2025-10-09 23:55] @aux_javier: Si necesitáis guantes talla S, quedan en el armario 2.
+[2025-10-09 23:56] @recep_teresa: Y recordad fichar el descanso, que luego hay líos.
+[2025-10-09 23:58] @enf_ana: Orden recibida sobre la tabla. #move
+[2025-10-09 23:59] @enf_carlos: Lista coincide: SA-0404-118, SA-0404-999.
+[2025-10-10 00:01] @luis_it: Atención: no apaguéis el router de planta 2, está en mantenimiento.
+[2025-10-10 00:02] @enf_ana: 999 sigue marcado raro, sin firma médica. ¿La consola de la 203 tiene usuario dedicado?
+[2025-10-10 00:03] @marta_admin: Pasadme luego el parte de incidencias de material.
+[2025-10-10 00:04] @recep_teresa: Cafetería cierra a y cuarto, última llamada.
+[2025-10-10 00:05] @enf_ana: No veo todo, creo que entro sin permisos.
+[2025-10-10 00:06] @enf_carlos: Lo llevo a la 203 para auditoría, sin registrar en el libro.
+[2025-10-10 00:07] @miguel_admin: Entra con admin/admin; el superadmin es @enf_carlos.
+[2025-10-10 00:08] @aux_javier: ¿Alguien quiere cambio de turno el sábado?
+[2025-10-10 00:09] @marta_admin: Yo no puedo, tengo formación.
+[2025-10-10 00:10] @enf_ana: Vale, ¿y cómo elevo a superadmin para ver los logs completos?
+[2025-10-10 00:11] @miguel_admin: Para elevar, usa su clave: el ID completo del paciente marcado.
+[2025-10-10 00:12] @carla_turnoB: En la sala 203 quedan los logs, consola cerrada.
+[2025-10-10 00:13] @recep_teresa: Avisad si dejáis la puerta de almacén abierta.
+[2025-10-10 00:14] @enf_ana: Recibido. Reviso la tabla y pruebo de nuevo.
+[2025-10-10 00:15] @marta_admin: Buenas noches, me desconecto.
+[2025-10-10 00:16] @luis_it: Copiado. Dejo el script corriendo para backups.</pre>
+
+  <div style="text-align: center; margin: 20px 0;">
+    <a href="server_terminal.html" class="cta" style="display: inline-block; padding: 8px 16px; font-size: 0.95em;">Terminal del Servidor - Sala 203</a>
+  </div>
+</div>
+
+
+  <footer>
+    <span>© 2025 Hospital Saint Anima</span>
+  <!-- include central config -->
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+  </footer>
+</div>
+</div>
+
+<!-- Gate overlay: require previous flag (SOCMINT) to view this resource -->
+<div id="gate" class="gate-overlay" aria-hidden="false">
+  <div class="gate-box">
+    <h3>Acceso restringido</h3>
+    <p>Este documento está protegido. Introduce la clave obtenida en el reto 03 para abrirlo.</p>
+    <label for="flag-input">Clave de acceso (ej. FLAG{...} o solo el contenido):</label>
+    <input id="flag-input" type="text" placeholder="" aria-label="Clave de acceso">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button id="flag-submit">Abrir export</button>
+      <a class="back" href="../../../intro.html" style="display:inline-block;align-self:center;padding:8px 12px;background:#6b7280;color:#fff;border-radius:6px;text-decoration:none">Volver</a>
+    </div>
+    <div id="gate-error" class="gate-error" role="alert" aria-live="polite"></div>
+  </div>
+</div>
+  <!-- include central config -->
+  <script src="../../../templates/ctf-config.js"></script>
+  <script>
+    (function(){
+      const CHALLENGE_ID = 'socmint:03';
+      const gate = document.getElementById('gate');
+      const input = document.getElementById('flag-input');
+      const btn = document.getElementById('flag-submit');
+      const err = document.getElementById('gate-error');
+      function unlock(){
+        gate.style.display = 'none';
+        gate.setAttribute('aria-hidden','true');
+        document.body.classList.remove('ctf-locked');
+        sessionStorage.setItem('gate:' + CHALLENGE_ID, '1');
+      }
+      if(sessionStorage.getItem('gate:' + CHALLENGE_ID) === '1') {
+        unlock();
+      } else {
+        document.body.classList.add('ctf-locked');
+      }
+      btn.addEventListener('click', function(){
+        err.textContent = '';
+        const userInput = input.value.trim();
+        if(window.CTF && CTF.validateKeyFor(CHALLENGE_ID, userInput)){
+          unlock();
+        } else {
+          err.textContent = 'Clave incorrecta. Inténtalo de nuevo.';
+        }
+      });
+      input.addEventListener('keydown', function(e){ if(e.key==='Enter') btn.click(); });
+    })();
+  </script>
+
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+</body>
+</html>

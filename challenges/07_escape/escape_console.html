@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergency Console — Escape Sequence</title>
+<link rel="stylesheet" href="../../templates/style.css">
+<style>
+  body { background:#0a0a0a; color:#00ff00; font-family: 'Courier New', monospace; }
+  .terminal-container { height: 100vh; display:flex; flex-direction:column; background:#1a1a1a; }
+  .terminal-header { background:#2a2a2a; padding:12px 16px; border-bottom:1px solid #333; display:flex; align-items:center; gap:8px; }
+  .title { color:#888; font-size:12px; }
+  .timer { color:#ff6b6b; font-weight:bold; background:#2a0a0a; padding:4px 8px; border-radius:4px; }
+  #terminal { flex:1; display:flex; flex-direction:column; padding:20px; overflow:auto; }
+  #output { flex:1; }
+  .output-line { white-space:pre-wrap; word-break:break-word; margin:2px 0; }
+  .cmd-echo { color:#ffff00; background:#2a2a1a; padding:2px 6px; border-left:2px solid #ffff00; font-weight:bold; }
+  .cmd-result { color:#00ff00; }
+  .error { color:#ff6b6b; background:#2a0a0a; padding:2px 6px; border-left:2px solid #ff6b6b; }
+  .success { color:#51cf66; background:#0a2a0a; padding:2px 6px; border-left:2px solid #51cf66; }
+  .warning { color:#fbbf24; background:#2a1a0a; padding:2px 6px; border-left:2px solid #fbbf24; }
+  .prompt { display:flex; gap:8px; align-items:center; }
+  .prompt-text { color:#888; }
+  #cmd { background:transparent; border:none; outline:none; color:#ffff00; flex:1; font-family:inherit; font-size:inherit; }
+  a.btn { display:inline-block; background:#3b82f6; color:#fff; padding:6px 10px; border-radius:6px; text-decoration:none; }
+  
+  /* Cutscene overlay */
+  #cutscene-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+  }
+  #cutscene-box {
+    max-width: 600px;
+    width: 90%;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 2px solid #00ff00;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    text-align: center;
+  }
+  #cutscene-text {
+    min-height: 100px;
+    margin-bottom: 20px;
+  }
+  .cutscene-prompt {
+    color: #ffff00;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="terminal-container">
+  <div class="terminal-header">
+    <div>
+      <span class="title">emergency@hospital:~ — Emergency Response Console</span>
+      <span style="display: block; font-size: 10px; color: #666; margin-top: 4px;">Ref: HSA-CTF-2025 · Unidad: Planta 4 · Medicina Interna</span>
+    </div>
+    <span style="flex:1"></span>
+    <span class="timer">TIME: <span id="timer-display">08:00</span></span>
+    <a class="btn" href="../../intro.html">← Volver</a>
+  </div>
+  <div id="terminal">
+    <div id="output"></div>
+    <div class="prompt">
+      <span class="prompt-text">emergency@hospital:~$</span>
+      <input id="cmd" type="text" autocomplete="off" autofocus>
+    </div>
+  </div>
+</div>
+
+<!-- Initial cutscene -->
+<div id="cutscene-overlay" style="display:none" tabindex="0">
+  <div id="cutscene-box">
+    <div id="cutscene-text"></div>
+    <span class="cutscene-prompt">[ PULSA INTRO PARA CONTINUAR ]</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const output = document.getElementById('output');
+  const cmd = document.getElementById('cmd');
+  const timerDisplay = document.getElementById('timer-display');
+  const cutsceneOverlay = document.getElementById('cutscene-overlay');
+  const cutsceneText = document.getElementById('cutscene-text');
+  const promptText = document.querySelector('.prompt-text');
+  
+  let timeLeft = 8 * 60; // 8 minutos para el pentest
+  let timerRunning = false;
+  let history = [];
+  let historyIndex = -1;
+  
+  // Sistema de servicios
+  let currentService = 'none'; // none, ftp, ssh
+  let currentUser = 'none'; // anonymous, maintenance, admin
+  let downloadedFiles = {}; // Archivos descargados del FTP
+  
+  // PIN que debe encontrarse en la consola
+  const SECRET_PIN = '2810';
+  
+  const WELCOME_MSG = `=== Emergency Network Console === Usa "help" para ver comandos disponibles.`;
+
+  const help = ` Comandos disponibles:
+  help                 Muestra esta ayuda
+  services             Lista servicios de red disponibles
+  ftp                  Conecta al FTP anónimo (modo archivo)
+  ssh                  Conecta por SSH (modo shell)
+  ls                   Lista archivos del servicio actual
+  get                  Descarga archivo (solo FTP)
+  cat                  Muestra contenido de archivo local
+  run                  Ejecuta un fichero en SSH (si es permitido)
+  whoami               Muestra el usuario/rol y servicio actual
+  open_door [PIN]      Abre la puerta de emergencia (requiere permisos admin)
+  disconnect           Desconecta del servicio actual
+  clear                Limpia la consola
+  exit                 Cierra la consola
+
+ALERTA: Sistema en modo emergencia. Acceso a servicios limitado.
+`;
+
+  const FTP_FILES = {
+    'README.txt': 'Servidor FTP de Emergencia\nAcceso anónimo habilitado temporalmente\nSolo lectura\n\nNOTA: Este servidor contiene backups y notas de mantenimiento.',
+    'backup_notes.txt': `=== NOTAS DE MANTENIMIENTO ===
+Fecha: 2025-10-08
+Técnico: J.Ramirez
+
+- Actualizado sistema de emergencia
+- Credenciales SSH de mantenimiento renovadas
+  Usuario: maintenance
+  Password: HSA_2025_m!
+- Protocolo Anima sigue activo en servidor principal
+- Puertas de emergencia requieren autorización de nivel ADMIN
+
+Recordatorio: No compartir credenciales fuera del equipo.`,
+    'emergency_codes.txt': `=== CÓDIGOS DE EMERGENCIA ===
+  Sistema de Puertas - Hospital Saint Anima
+
+  Puerta Principal: 1892 (DESACTIVADA)
+  Puerta Sala 203: 2810 (BLOQUEADA)
+  Puerta Lab -2: 4457 (DESACTIVADA)
+  Puerta Almacén: 3321 (DESACTIVADA)
+
+  Nota: Solo un código está activo actualmente.
+  ADVERTENCIA: Los códigos de puerta requieren permisos de ADMINISTRADOR.
+  El acceso con usuario estándar será rechazado por el sistema de seguridad.`,
+    'system_info.txt': 'Hostname: emergency-srv-01\nIP: 192.168.203.50\nServicios activos:\n- FTP (puerto 21) - Acceso anónimo\n- SSH (puerto 22) - Autenticación requerida\n\nSistema operativo: Linux 5.15\nÚltimo backup: 2025-10-10 01:00:00'
+  };
+
+  const SSH_FILES = {
+    '.bash_history': `cat /etc/passwd
+ls -la /opt
+run /opt/admin_tools/escalate.sh
+exit`,
+    'README_maintenance.txt': 'Usuario de mantenimiento\nPermisos limitados\nUbicación de herramientas administrativas: /opt/admin_tools\nPara tareas administrativas, contactar al equipo de seguridad.',
+    '/opt/admin_tools/escalate.sh': `#!/bin/bash
+# Script de escalado de privilegios (vulnerable)
+# Solo para pruebas - NO USAR EN PRODUCCIÓN
+echo "Escalando privilegios..."
+echo "Usuario actual: maintenance"
+echo "Elevando a: admin"
+# Vulnerabilidad: no valida permisos correctamente
+export USER_ROLE=admin
+echo "Privilegios elevados. Ahora eres admin."`,
+    'access_log.txt': '[2025-10-10 01:15:32] Usuario maintenance conectado\n[2025-10-10 01:18:45] Intento de escalado rechazado\n[2025-10-10 01:22:11] Script /opt/admin_tools/escalate.sh ejecutado\n[2025-10-10 01:22:15] Usuario elevado a admin'
+  };
+
+  // Efecto typewriter
+  function typeWriter(text, callback) {
+    let index = 0;
+    cutsceneText.textContent = '';
+    
+    function type() {
+      if (index < text.length) {
+        cutsceneText.textContent += text[index];
+        index++;
+        setTimeout(type, 50);
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+
+  // Mostrar cutscene inicial
+  function showInitialCutscene() {
+    cutsceneOverlay.style.display = 'flex';
+    cutsceneOverlay.focus();
+    const message = `"Veo que has descubierto más de lo que deberías.
+  He estado observando cada uno de tus movimientos.
+  Los que controlan esto querían mantenerlo en silencio.
+  Pero tienes algo que yo también necesito: la verdad.
+
+  Te daré una oportunidad. Una sola.
+  Escapa antes de que lleguen. Yo me encargaré de borrar tus rastros.
+
+  El sistema de emergencia tiene servicios de red expuestos.
+  Investiga, compromete, escala. Encuentra la salida.
+  Tienes ocho minutos. Buena suerte."`;
+    
+    typeWriter(message.toUpperCase(), () => {
+      // Esperar a que presione Enter
+    });
+  }
+
+  function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    if (timeLeft <= 0) {
+      timerRunning = false;
+      add('⏰ TIEMPO AGOTADO. Sistema reiniciando...', 'error');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } else {
+      timeLeft--;
+    }
+  }
+
+  function add(text, cls) {
+    if (text === null) return;
+    const div = document.createElement('div');
+    div.className = 'output-line ' + (cls || '');
+    div.innerHTML = text;
+    output.appendChild(div);
+    const term = document.getElementById('terminal');
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function echo(s) { add('$ ' + s, 'cmd-echo'); }
+  function err(s) { return `<span class="error">${s}</span>`; }
+  function success(s) { return `<span class="success">${s}</span>`; }
+  function warning(s) { return `<span class="warning">${s}</span>`; }
+
+  function updatePrompt() {
+    if (currentService === 'none') {
+      promptText.textContent = 'emergency@hospital:~$';
+    } else if (currentService === 'ftp') {
+      promptText.textContent = 'ftp@emergency-srv-01:~$';
+    } else if (currentService === 'ssh') {
+      promptText.textContent = `${currentUser}@emergency-srv-01:~$`;
+    }
+  }
+
+  const commands = {
+    help() { return help; },
+    clear() { output.innerHTML = ''; return null; },
+    exit() { 
+      add('Cerrando consola de emergencia...', 'warning'); 
+      setTimeout(() => { window.location.href = 'resource.html'; }, 600); 
+      return null; 
+    },
+    
+    services() {
+      return `Servicios de red disponibles en emergency-srv-01:
+
+[FTP] Puerto 21 - Servidor de archivos (acceso anónimo disponible)
+[SSH] Puerto 22 - Shell remoto (requiere credenciales)
+
+Uso: connect ftp | connect ssh <usuario> <password>`;
+    },
+    
+    // Alias de conexión real: ftp
+    ftp(args) {
+      const userArg = (args && args[0]) ? args[0].toLowerCase() : 'anonymous';
+      if (userArg !== 'anonymous') {
+        return err('ftp: solo se permite el modo anónimo (ftp o ftp anonymous).');
+      }
+      currentService = 'ftp';
+      currentUser = 'anonymous';
+      updatePrompt();
+      return success(`Conectado a FTP (emergency-srv-01:21) como anonymous\n\nServidor FTP de emergencia - Acceso anónimo habilitado\nComandos disponibles: ls, get <archivo>, disconnect`);
+    },
+    
+    // Alias de conexión real: ssh <user> <pass>
+    ssh(args) {
+      const user = args[0];
+      const pass = args[1];
+      if (!user || !pass) return err('ssh: uso ssh <usuario> <password>\n\nEjemplo: ssh maintenance [password]');
+      if (user === 'maintenance' && pass === 'HSA_2025_m!') {
+        currentService = 'ssh';
+        currentUser = 'maintenance';
+        updatePrompt();
+        return success(`SSH: Autenticación exitosa\n\nConectado como maintenance@emergency-srv-01\nÚltimo acceso: 2025-10-10 01:15:32\n\nComandos disponibles: ls, cat <archivo>, run <ruta>, disconnect`);
+      }
+      return err(`SSH: Autenticación fallida\nUsuario o contraseña incorrectos\n\nPista: Revisa los archivos descargados del FTP.`);
+    },
+    
+    connect(args) {
+      const service = args[0];
+      if (!service) return err('connect: uso connect <servicio> o connect ssh <user> <pass>');
+      
+      if (service === 'ftp') {
+        currentService = 'ftp';
+        currentUser = 'anonymous';
+        updatePrompt();
+        return success(`Conectado a FTP (emergency-srv-01:21) como anonymous
+
+Servidor FTP de emergencia - Acceso anónimo habilitado
+Comandos disponibles: ls, get <archivo>, disconnect`);
+      } else if (service === 'ssh') {
+        const user = args[1];
+        const pass = args[2];
+        if (!user || !pass) return err('connect ssh: uso connect ssh <usuario> <password>\n\nEjemplo: connect ssh maintenance [password]');
+        
+        if (user === 'maintenance' && pass === 'HSA_2025_m!') {
+          currentService = 'ssh';
+          currentUser = 'maintenance';
+          updatePrompt();
+          return success(`SSH: Autenticación exitosa\n\nConectado como maintenance@emergency-srv-01\nÚltimo acceso: 2025-10-10 01:15:32\n\nComandos disponibles: ls, cat <archivo>, run <ruta>, disconnect`);
+        } else {
+          return err(`SSH: Autenticación fallida\nUsuario o contraseña incorrectos\n\nPista: Revisa los archivos descargados del FTP.`);
+        }
+      } else {
+        return err(`Servicio desconocido: ${service}. Usa "services" para ver disponibles.`);
+      }
+    },
+    
+    disconnect() {
+      if (currentService === 'none') return err('No estás conectado a ningún servicio.');
+      const prev = currentService.toUpperCase();
+      currentService = 'none';
+      currentUser = 'none';
+      updatePrompt();
+      return success(`Desconectado de ${prev}.`);
+    },
+    
+    ls() {
+      if (currentService === 'none') {
+        return 'Archivos locales descargados:\n' + (Object.keys(downloadedFiles).length === 0 ? '  (vacío)' : Object.keys(downloadedFiles).map(f => `  ${f}`).join('\n'));
+      } else if (currentService === 'ftp') {
+        return 'Archivos en FTP:\n' + Object.keys(FTP_FILES).map(f => `  ${f}`).join('\n');
+      } else if (currentService === 'ssh') {
+        const files = currentUser === 'admin'
+          ? Object.keys(SSH_FILES)
+          : Object.keys(SSH_FILES).filter(f => !f.startsWith('/opt'));
+        return files.map(f => `  ${f}`).join('\n') || '  (vacío)';
+      }
+    },
+    
+    get(args) {
+      if (currentService !== 'ftp') return err('get: comando solo disponible en FTP.');
+      const filename = args[0];
+      if (!filename) return err('get: uso get <archivo>');
+      
+      const file = FTP_FILES[filename];
+      if (!file) return err(`get: archivo no encontrado: ${filename}`);
+      
+      downloadedFiles[filename] = file;
+      return success(`Archivo descargado: ${filename}\nUsa "cat ${filename}" para ver su contenido.`);
+    },
+    
+    cat(args) {
+      const filename = args[0];
+      if (!filename) return err('cat: uso cat <archivo>');
+      
+      // Archivos descargados localmente
+      if (downloadedFiles[filename]) {
+        return downloadedFiles[filename];
+      }
+      
+      // Archivos en SSH
+      if (currentService === 'ssh') {
+        const file = SSH_FILES[filename];
+        if (file) return file;
+        
+        // Archivos admin
+        if (currentUser === 'admin' && SSH_FILES[filename]) {
+          return SSH_FILES[filename];
+        }
+      }
+      
+      return err(`cat: ${filename}: No such file or directory`);
+    },
+    
+    sudo(args) {
+      if (currentService !== 'ssh') return err('sudo: comando solo disponible en SSH.');
+      return err('sudo: comando no permitido en este entorno.');
+    },
+
+    run(args) {
+      if (currentService !== 'ssh') return err('run: comando solo disponible en SSH.');
+      const path = args[0];
+      if (!path) return err('run: uso run <ruta>');
+      if (path === '/opt/admin_tools/escalate.sh') {
+        currentUser = 'admin';
+        updatePrompt();
+        return success(`Ejecutando ${path}...\nEscalando privilegios...\nUsuario actual: maintenance\nElevando a: admin\nPrivilegios elevados. Ahora eres admin.`);
+      }
+      return err('run: permiso denegado o archivo no ejecutable.');
+    },
+
+    whoami() {
+      const role = currentUser === 'admin' ? 'admin (superadmin)' : currentUser;
+      return `Usuario: ${role}\nServicio: ${currentService}`;
+    },
+    
+    open_door(args) {
+      if (!args[0]) return err('open_door: PIN requerido (4 dígitos)');
+      if (currentUser !== 'admin') {
+        return err(`ACCESO DENEGADO\nSistema de seguridad: Permisos insuficientes\nUsuario actual: ${currentUser}\nSe requiere: admin`);
+      }
+      if (currentService === 'ftp') {
+        return err('open_door: no disponible en FTP. Requiere contexto de shell administrativo (SSH).');
+      }
+      if (args[0] === SECRET_PIN) {
+        showFinalCutscene();
+        return null;
+      }
+      return err('PIN incorrecto. Solo un PIN es válido.');
+    }
+  };
+
+  function add(text, cls) {
+    if (text === null) return;
+    const div = document.createElement('div');
+    div.className = 'output-line ' + (cls || '');
+    div.innerHTML = text;
+    output.appendChild(div);
+    const term = document.getElementById('terminal');
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function echo(s) { add('$ ' + s, 'cmd-echo'); }
+  function err(s) { return `<span class="error">${s}</span>`; }
+  function success(s) { return `<span class="success">${s}</span>`; }
+  function warning(s) { return `<span class="warning">${s}</span>`; }
+
+  function run(input) {
+    const line = (input || '').trim();
+    if (!line) return;
+    echo(line);
+    const parts = line.split(/\s+/);
+    const c = parts[0].toLowerCase();
+    const args = parts.slice(1);
+    
+    if (commands[c]) {
+      const res = commands[c](args);
+      if (res !== null) {
+        add(res, 'cmd-result');
+      }
+    } else {
+      add(`command not found: ${c}`, 'error');
+    }
+  }
+
+  function showFinalCutscene() {
+    cutsceneOverlay.style.display = 'flex';
+    cmd.disabled = true;
+    
+    // Split-join avoids extra leading spaces from indentation in the overlay text
+    const finalMessage = [
+      'Parece que tenía razón sobre ti.',
+      '',
+      'Ahora vete. No mires atrás.',
+      'Lo que sucedió aquí hoy... el experimento Anima, los datos, todo...',
+      'Saldrá a la luz. Pero no por nosotros.',
+      'La verdad siempre encuentra un camino.',
+      '',
+      'Sé lo que eres. Sé lo que has hecho.',
+      'Y sé que volveremos a encontrarnos.',
+      '',
+      '—La puerta está abierta. Ahora, corre.'
+    ].join('\n');
+    
+    typeWriter(finalMessage.toUpperCase(), () => {
+      // Mark completion in storage immediately
+      try { sessionStorage.setItem('reto_07_completed', 'true'); } catch(e) {}
+      setTimeout(() => {
+        window.location.href = '../../summary.html';
+      }, 3000);
+    });
+    // Allow pressing Enter to skip waiting
+    const finalHandler = (e) => {
+      if (e.key === 'Enter') {
+        try { sessionStorage.setItem('reto_07_completed', 'true'); } catch(err) {}
+        window.location.href = '../../summary.html';
+      }
+    };
+    cutsceneOverlay.addEventListener('keydown', finalHandler, { once: true });
+    cutsceneOverlay.focus();
+  }
+
+  cmd.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const input = cmd.value.trim();
+      if (input) {
+        history.push(input);
+        historyIndex = history.length;
+      }
+      run(cmd.value);
+      cmd.value = '';
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      handleTabCompletion();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length > 0 && historyIndex > 0) {
+        historyIndex--;
+        cmd.value = history[historyIndex];
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        cmd.value = history[historyIndex];
+      } else if (historyIndex === history.length - 1) {
+        historyIndex = history.length;
+        cmd.value = '';
+      }
+    }
+  });
+
+  cutsceneOverlay.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      cutsceneOverlay.style.display = 'none';
+      if (!timerRunning) {
+        timerRunning = true;
+        setInterval(updateTimer, 1000);
+        add('✓ Conexión establecida', 'success');
+        add('Escribe "help" para ver los comandos disponibles.', 'cmd-result');
+        cmd.focus();
+      }
+    }
+  });
+
+  function handleTabCompletion() {
+    const input = (cmd.value || '').trim();
+    const parts = input.split(/\s+/).filter(Boolean);
+    const current = parts[parts.length - 1] || '';
+    
+    const allCommands = Object.keys(commands);
+    const allFtpFiles = Object.keys(FTP_FILES);
+    const allLocalFiles = Object.keys(downloadedFiles);
+    const allSshFilesVisible = currentService === 'ssh'
+      ? (currentUser === 'admin'
+          ? Object.keys(SSH_FILES)
+          : Object.keys(SSH_FILES).filter(f => !f.startsWith('/opt')).concat(['/opt/admin_tools/escalate.sh']))
+      : [];
+    
+    function complete(list) {
+      const matches = list.filter(x => x.toLowerCase().startsWith(current.toLowerCase()));
+      if (matches.length === 1) {
+        parts[parts.length - 1] = matches[0];
+        cmd.value = parts.join(' ') + (parts.length === 1 ? ' ' : '');
+      } else if (matches.length > 1) {
+        add(`Disponibles: ${matches.join(', ')}`, 'cmd-result');
+      }
+    }
+    
+    if (parts.length === 1) {
+      complete(allCommands);
+    } else if (parts[0].toLowerCase() === 'get' && currentService === 'ftp') {
+      complete(allFtpFiles);
+    } else if (parts[0].toLowerCase() === 'cat') {
+      if (currentService === 'ssh') {
+        complete(allSshFilesVisible);
+      } else {
+        complete(allLocalFiles);
+      }
+    } else if (parts[0].toLowerCase() === 'run' && currentService === 'ssh') {
+      complete(allSshFilesVisible);
+    }
+  }
+
+  // Mostrar cutscene inicial
+  showInitialCutscene();
+})();
+</script>
+</body>
+</html>

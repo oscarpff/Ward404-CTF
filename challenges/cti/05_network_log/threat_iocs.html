@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Threat Intelligence Feed · Hospital Saint Anima</title>
+  <link rel="stylesheet" href="../../../templates/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../../../assets/logo_saint_anima.png" alt="Logo Saint Anima">
+      <div>
+        <h1>🔍 Threat Intelligence Feed</h1>
+        <div class="lead">Indicadores de compromiso (IOCs) conocidos - Base de datos actualizada</div>
+      </div>
+      <div class="meta small">
+        Ref: HSA-CTF-2025<br>
+        Unidad: Planta 4 · Medicina Interna
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="meta"><a class="back" href="resource.html" target="_self">⟵ Volver a Network Logs</a></div>
+    </div>
+
+    <div class="notice">
+      <strong>Uso:</strong> Compara las IPs destino de los logs de red con esta lista de indicadores maliciosos conocidos. Si encuentras una coincidencia, investiga el contexto de esa IP para obtener más información.
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <h3>📋 Lista de IPs maliciosas conocidas (IOCs)</h3>
+        <div class="small" style="margin:8px 0 12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+          <label class="meta">Verifica correlación (IP + Puerto + Minuto):</label>
+          <input id="ioc-ip" type="text" placeholder="IP (ej. 185.125.190.58)" style="padding:6px 8px; border:1px solid #e5e7eb; border-radius:6px; min-width:180px">
+          <input id="ioc-port" type="text" placeholder="PUERTO (ej. 9443)" style="padding:6px 8px; border:1px solid #e5e7eb; border-radius:6px; min-width:120px">
+          <input id="ioc-time" type="text" placeholder="MINUTO HH:MM (ej. 01:52)" style="padding:6px 8px; border:1px solid #e5e7eb; border-radius:6px; min-width:150px">
+          <button id="ioc-search-btn" class="cta" style="padding:6px 10px">Validar</button>
+          <span id="ioc-search-msg" class="meta" style="min-height:20px"></span>
+        </div>
+        <table style="width:100%; border-collapse:collapse; font-size:0.9em">
+          <thead>
+            <tr style="background:#f3f4f6; text-align:left">
+              <th style="padding:8px; border:1px solid #e5e7eb">IP Address</th>
+              <th style="padding:8px; border:1px solid #e5e7eb">Category</th>
+              <th style="padding:8px; border:1px solid #e5e7eb">Description</th>
+              <th style="padding:8px; border:1px solid #e5e7eb">First Seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>45.142.212.61</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">C2 Server</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Cobalt Strike beacon infrastructure</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-15</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>78.47.204.93</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Phishing</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Credential harvesting campaign</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-20</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>185.125.190.58</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">Data Exfil</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Known data exfiltration node - Healthcare sector targeting</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-08-12</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>103.253.145.29</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">C2 Server</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">APT group infrastructure</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-01</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>194.87.139.103</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Malware DL</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Malware distribution server</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-18</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>91.234.99.157</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Phishing</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Business Email Compromise (BEC)</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-22</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>162.244.83.71</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">C2 Server</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">RAT (Remote Access Trojan) C2</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-08-28</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>212.192.246.30</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#dcfce7; color:#166534; padding:2px 6px; border-radius:4px">Scanning</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Port scanning activity</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-25</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>45.95.168.222</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Cryptomining</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Unauthorized cryptocurrency mining</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-10</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>89.248.172.16</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">Ransomware</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">LockBit 3.0 infrastructure</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-05</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>176.123.8.71</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#dcfce7; color:#166534; padding:2px 6px; border-radius:4px">Brute Force</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">SSH/RDP brute force attempts</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-28</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>37.120.222.167</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Malware DL</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Trojan downloader distribution</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-12</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>185.220.101.43</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#dcfce7; color:#166534; padding:2px 6px; border-radius:4px">Tor Exit</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Tor network exit node (suspicious activity)</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-08-30</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>23.106.223.97</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fee; color:#c00; padding:2px 6px; border-radius:4px">C2 Server</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">Emotet botnet command server</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-08</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #e5e7eb"><code>198.46.178.110</code></td>
+              <td style="padding:8px; border:1px solid #e5e7eb"><span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px">Phishing</span></td>
+              <td style="padding:8px; border:1px solid #e5e7eb">COVID-19 themed phishing campaign</td>
+              <td style="padding:8px; border:1px solid #e5e7eb">2025-09-16</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div id="critical-alert" class="card" style="background:#fef3c7; border-left:4px solid #f59e0b; display:none">
+        <h3 style="color:#92400e">⚠️ CRITICAL ALERT - Recent Healthcare Targeting</h3>
+        <p><strong>IP:</strong> <code id="critical-ip" style="background:#fff; padding:2px 6px; border-radius:4px"></code></p>
+        <p><strong>Threat Actor:</strong> APT-MedSteal (suspected)</p>
+        <p><strong>TTP:</strong> Data exfiltration via non-standard HTTPS port (9443). Targets patient records and internal communications from medical facilities.</p>
+        <p><strong>Recommendation:</strong> Block immediately. Investigate any connections to this IP in your environment.</p>
+        <p id="critical-flag" style="margin-top:12px; padding:10px; background:#fff; border:1px solid #f59e0b; border-radius:6px; display:none">
+          <strong>🚨 Investigation Status:</strong> Correlación confirmada. Documenta con: <code>FLAG{CTI_CONNECTED}</code>
+        </p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span>© 2025 Hospital Saint Anima - IT Security Department</span>
+      <span class="small">Threat Intelligence aggregated from: AlienVault OTX, Abuse.ch, MISP</span>
+    </footer>
+  </div>
+
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+
+  <script>
+    (function(){
+      const KNOWN_MATCH_IP = '185.125.190.58';
+      const KNOWN_PORT = '9443';
+      const KNOWN_MINUTE = '01:52'; // from [2025-10-10 01:52:03]
+      const inputIp = document.getElementById('ioc-ip');
+      const inputPort = document.getElementById('ioc-port');
+      const inputTime = document.getElementById('ioc-time');
+      const btn = document.getElementById('ioc-search-btn');
+      const msg = document.getElementById('ioc-search-msg');
+      const alertBox = document.getElementById('critical-alert');
+      const alertIp = document.getElementById('critical-ip');
+      const alertFlag = document.getElementById('critical-flag');
+      let attempts = 0;
+
+      function check(){
+        const ip = String(inputIp && inputIp.value || '').trim();
+        const port = String(inputPort && inputPort.value || '').trim();
+        const minute = String(inputTime && inputTime.value || '').trim();
+        msg.textContent = '';
+        alertBox.style.display = 'none';
+        alertFlag.style.display = 'none';
+        if(!ip || !port || !minute) { msg.textContent = 'Introduce IP, puerto y minuto (HH:MM) de la conexión.'; return; }
+        // Very basic IP validation
+        const ipRe = /^(\d{1,3}\.){3}\d{1,3}$/;
+        if(!ipRe.test(ip)) { msg.textContent = 'Formato de IP inválido.'; return; }
+
+        const minuteRe = /^\d{2}:\d{2}$/;
+        if(!minuteRe.test(minute)) { msg.textContent = 'Formato de minuto inválido. Usa HH:MM.'; return; }
+
+        const ipOk = (ip === KNOWN_MATCH_IP);
+        const portOk = (port === KNOWN_PORT);
+        const timeOk = (minute === KNOWN_MINUTE);
+
+        if(ipOk && portOk && timeOk){
+          alertIp.textContent = ip;
+          alertBox.style.display = 'block';
+          alertFlag.style.display = 'block';
+          msg.textContent = 'Coincidencia encontrada en el feed.';
+          attempts = 0;
+        } else {
+          attempts++;
+          let hints = [];
+          if(ipOk && !portOk) hints.push('puerto incorrecto');
+          if(ipOk && portOk && !timeOk) hints.push('minuto incorrecto');
+          msg.textContent = hints.length ? ('Casi: ' + hints.join(', ') + '.') : 'Sin coincidencias críticas. Revisa los logs.';
+          if(attempts >= 5){
+            msg.textContent = 'Demasiados intentos. Revisa los logs con calma y vuelve a intentarlo.';
+            btn.disabled = true;
+          }
+        }
+      }
+
+      btn && btn.addEventListener('click', () => check());
+      [inputIp, inputPort, inputTime].forEach(el => el && el.addEventListener('keydown', (e) => { if(e.key==='Enter') check(); }));
+
+      // Auto-check using query param ?ip=
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const qpIp = params.get('ip');
+        const qpPort = params.get('port');
+        const qpTime = params.get('t') || params.get('time');
+        if(qpIp){ inputIp && (inputIp.value = qpIp); }
+        if(qpPort){ inputPort && (inputPort.value = qpPort); }
+        if(qpTime){ inputTime && (inputTime.value = qpTime); }
+        if(qpIp && qpPort && qpTime){
+          check();
+        }
+      } catch(e){}
+    })();
+  </script>
+</body>
+</html>

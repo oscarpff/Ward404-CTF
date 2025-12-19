@@ -1,0 +1,12 @@
+FLAG{SOCMINT_EVIDENCE}
+
+---
+Archivo: evidence_FLAG{SOCMINT_EVIDENCE}.txt
+Origen: copia subida por usuario @carla_turnoB
+Descripción: Extracto de texto recuperado del dispositivo. Contiene notas sueltas y una referencia a transferencias internas.
+
+Notas del contenido:
+- 2025-10-30 15:01 — "Encontré esto en la sala de descanso. Lo subí a old_photos."
+- 2025-10-30 15:05 — "Mover a carpeta segura y avisar a sistemas."
+
+Fin del documento.

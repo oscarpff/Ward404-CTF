@@ -1,0 +1,96 @@
+/* CTF-MUCS base style — edit as needed */
+:root{
+  --bg:#f3f8fb; /* pale clinic blue */
+  --paper:#ffffff;
+  --brand:#0b6fa4; /* hospital blue */
+  --accent:#0b9aa8; /* teal accent */
+  --muted:#556b75;
+  --danger:#b91c1c;
+  --radius:10px;
+  --font: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+html,body{height:100%;margin:0;font-family:var(--font);background:linear-gradient(180deg,var(--bg), #ffffff);color:#102029}
+.container{max-width:980px;margin:28px auto;padding:28px;background:var(--paper);border-radius:var(--radius);box-shadow:0 10px 30px rgba(8,31,45,0.06)}
+.header{display:flex;align-items:center;gap:16px}
+.header img{height:64px}
+.title{font-size:1.6rem;font-weight:700;color:var(--brand)}
+.lead{color:var(--muted);margin-top:6px}
+.section{margin-top:20px}
+.card{padding:18px;border-radius:8px;background:#fbfdff;border:1px solid #e6f1f6}
+.meta{font-size:0.92rem;color:var(--muted)}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;background:var(--brand);color:white;border-radius:10px;text-decoration:none;font-weight:600;box-shadow:0 8px 24px rgba(11,111,164,0.12);border:1px solid rgba(255,255,255,0.04);transition:transform .12s ease,box-shadow .12s ease,opacity .12s ease}
+.cta:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(11,111,164,0.14);opacity:0.98}
+.cta:active{transform:translateY(0);box-shadow:0 8px 24px rgba(11,111,164,0.10)}
+.cta:focus{outline:3px solid rgba(11,111,164,0.14);outline-offset:3px}
+.footer{margin-top:24px;color:var(--muted);font-size:0.9rem;text-align:center}
+.flagbox{background:#0f172a;color:#f8fafc;padding:10px;border-radius:6px;font-family:monospace}
+.notice{background:#f0fbfb;border:1px solid #cfeff0;padding:12px;border-radius:8px;color:#06424b}
+
+/* Small helpers for navigation and downloads */
+.meta a.back{display:inline-block;padding:6px 10px;background:var(--brand);color:#fff;border-radius:6px;text-decoration:none;margin-right:8px}
+.download-btn{display:inline-block;padding:6px 10px;background:var(--brand);color:#fff;border-radius:6px;text-decoration:none;font-size:0.95rem;margin-right:8px}
+.download-btn:hover,.meta a.back:hover{opacity:0.95}
+
+/* Collapsible hint control used in challenge pages */
+details.hint{margin-top:8px}
+details.hint summary{list-style:none;cursor:pointer;display:inline-block;padding:6px 10px;background:var(--accent);color:#fff;border-radius:6px}
+details.hint[open] summary{background:#0e6a73}
+details.hint .hint-body{margin-top:8px;padding:8px;border-left:3px solid #bde9eb;background:#f8ffff;border-radius:6px}
+
+/* Additional common styles used by challenge pages */
+.container{max-width:920px;margin:36px auto;padding:28px;border:1px solid #e6f1f6;border-radius:10px;background:var(--paper)}
+.header{display:flex;gap:16px;align-items:center;border-bottom:3px solid var(--brand);padding-bottom:14px;margin-bottom:18px}
+.header img{width:76px;height:auto}
+.header h1{margin:0;font-size:22px;color:var(--brand)}
+.meta{margin-left:auto;text-align:right;font-size:12px;color:var(--muted)}
+.section{padding:14px 0;border-top:1px dashed #e6f1f6}
+.small{font-size:13px;color:var(--muted)}
+pre{background:#f8fbfc;border:1px solid #e6f1f6;padding:12px;border-radius:6px;overflow:auto}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Courier New";font-size:13px}
+.notice{background:#f0fbfb;border:1px solid #cfeff0;color:#06424b;padding:10px;border-radius:8px}
+footer{margin-top:20px;padding-top:12px;border-top:2px solid var(--brand);display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+/* gate overlay styling */
+.gate-overlay{position:fixed;inset:0;background:rgba(2,20,28,0.45);display:flex;align-items:center;justify-content:center;z-index:1200}
+.gate-box{background:#fff;padding:20px;border-radius:8px;max-width:520px;width:90%;box-shadow:0 12px 40px rgba(2,6,23,0.2);text-align:left}
+.gate-box h3{margin:0 0 8px 0;color:var(--brand)}
+.gate-box input{width:100%;padding:10px;border:1px solid #e6f1f6;border-radius:6px;margin-top:8px}
+.gate-box button{margin-top:10px;padding:8px 12px;background:var(--brand);color:#fff;border-radius:6px;border:0;cursor:pointer}
+.gate-error{color:var(--danger);margin-top:8px}
+/* lock/blur main content while gate is active */
+.ctf-locked .container{filter:blur(6px) saturate(.95);pointer-events:none;user-select:none}
+
+/* Small back button used across pages */
+.back{display:inline-block;padding:6px 10px;background:var(--brand);color:#fff;border-radius:6px;text-decoration:none}
+
+/* Project-wide hero and badges used on intro/conclusion */
+.hero{padding:22px;border-radius:12px;background:linear-gradient(180deg,rgba(11,111,164,0.06), rgba(11,154,168,0.04));display:flex;gap:18px;align-items:center}
+.hero .hero-title{font-size:1.4rem;font-weight:800;color:var(--brand)}
+.hero .hero-sub{color:var(--muted);margin-top:6px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:#e6f6fb;color:var(--brand);font-weight:700;border:1px solid rgba(11,154,168,0.12)}
+.success-panel{padding:18px;border-radius:10px;background:linear-gradient(180deg,#f7fffb,#f0f9f7);border:1px solid #d6f3ea;margin-top:12px}
+.conclusion-hero{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.conclusion-hero .left{flex:1}
+.kicker{font-size:0.85rem;color:var(--muted);font-weight:600}
+.muted-block{color:var(--muted)}
+
+/* responsive tweaks */
+@media (max-width:640px){
+  .hero{flex-direction:column;align-items:flex-start}
+  .conclusion-hero{flex-direction:column;align-items:flex-start}
+}
+
+/* Watermark: shared across pages. Use an <img class="watermark" src="..."> placed near </body> */
+.watermark{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);opacity:0.06;pointer-events:none;width:100vw;height:auto;max-width:none;filter:grayscale(1) contrast(.95) blur(.4px);z-index:0}
+@media (max-width:640px){
+  .watermark{width:120vw;opacity:0.035;filter:grayscale(1) contrast(.9) blur(.3px)}
+}
+
+/* Ensure main content stacks above the watermark */
+.container, .launch-wrap {position:relative;z-index:1}
+
+/* Ensure common content blocks stack above the watermark even if a .container wrapper is missing */
+.header, .card, .section, .notice, .footer, .hero, .header img, .title {position:relative;z-index:1}
+
+/* Specific higher stacking for hero/launch card when needed */
+.launch-wrap{z-index:2}
+

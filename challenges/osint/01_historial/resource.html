@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El historial borrado · Hospital Saint Anima</title>
+<link rel="stylesheet" href="../../../templates/style.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+  <img src="../../../assets/logo_saint_anima.png" alt="Hospital Saint Anima logo">
+    <div>
+      <h1>Hospital Saint Anima</h1>
+    </div>
+    <div class="meta small">
+      Ref: HSA-CTF-2025<br>
+      Unidad: Planta 4 · Medicina Interna
+    </div>
+  </div>
+
+  <div class="section">
+  <div class="meta"><a class="back" href="../../../intro.html" target="_self">⟵ Volver a Inicio</a></div>
+  </div>
+  
+  <div class="notice">
+    <strong>Contexto:</strong> Se audita el expediente inicial de SA-0404-999 justo después de su ingreso.
+    <br>
+    <strong>Objetivo:</strong> Recuperar la evidencia oculta en el expediente (comentarios, metadatos) para confirmar la manipulación del mismo.
+    <br>
+    <details class="hint">
+      <summary>Pista</summary>
+      <div class="hint-body">El rastro persiste en el código fuente y los comentarios HTML; no está en el texto visible.</div>
+    </details>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <h2>Expediente clínico — Extracto SA-0404-999 (Borrado parcialmente)</h2>
+
+      <!-- REDACTED DATA RECOVERED FROM AUDIT LOG:
+      PATIENT_NAME=Julio Sainz Morales
+      DOB=1988-05-14
+      ADMISSION_DATE=2025-10-10 11:24
+      ADMISSION_WARD=203 (Saint Anima Research Wing)
+      PRIMARY_PHYSICIAN=Dr. Rafael Mora (Head of Experimental Protocol)
+      DIAGNOSIS_INITIAL=Acute respiratory distress (cover diagnosis)
+      DIAGNOSIS_ACTUAL=Selected for Anima Protocol - neural interface tolerance testing
+      CONSENT_STATUS=Not properly documented - subject unaware
+      -->
+
+      <table class="record-table" style="width:100%;border-collapse:collapse;margin-top:8px">
+        <tr><th style="text-align:left;width:30%">Campo</th><th style="text-align:left">Valor</th></tr>
+        <tr><td>Nombre</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Julio Sainz Morales --></td></tr>
+        <tr><td>ID paciente</td><td>SA-0404-999</td></tr>
+        <tr><td>Fecha de nacimiento</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- 1988-05-14 --></td></tr>
+        <tr><td>Admisión</td><td>2025-10-10 — Sala 203<!-- 11:24 - Ala de investigación Saint Anima --></td></tr>
+        <tr><td>Médico responsable</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Dr. Rafael Mora --></td></tr>
+        <tr><td>Diagnósticos</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Protocolo Anima: pruebas de tolerancia de interfaz neural | FLAG{OSINT_RECOVERED} --></td></tr>
+        <tr><td>Antecedentes</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Historial clínico limpio, sin condiciones previas relevantes --></td></tr>
+        <tr><td>Medicaciones</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Sedantes experimentales; protocolo no estándar --></td></tr>
+      </table>
+
+      <h3 style="margin-top:12px">Notas clínicas (parcialmente recuperadas)</h3>
+      <p><strong>2025-10-10 — [REDACTADO]</strong><br>[REDACTADO — EVIDENCIA BORRADA]<!-- Protocolo de consentimiento informado: NEGOCIADO (no oficial). Sujeto inducido mediante engaño sobre naturaleza de procedimiento. --> Protocolo de consentimiento informado: no disponible.</p>
+      <p><strong>2025-10-10 15:02 — Enfermería (turno B)</strong><br>Observado movimiento de datos desde dispositivo del paciente SA-0404-999 hacia infraestructura externa. Datos sensibles. Incidencia reportada a sistemas como #INC-224. 
+      <p><strong>ADVERTENCIA: Este registro fue destinado a eliminación pero persiste en los logs de auditoría.</strong></p><!-- Transferencia confirmada: registros biométricos, resonancia magnética funcional (fMRI) pre-protocolo, y historial de reacción a estimuli neuronales. Destino: 185.125.190.58:9443 (nodo de exfiltración conocido) --></p>
+
+      <!-- INTERNAL AUDIT FLAG: This record is linked to Anima Protocol security breach.
+      Investigation status: ACTIVE
+      Related incidents: #INC-224, #INC-225, #INC-226
+      Data exfiltration confirmed: 2025-10-10 01:52:03 UTC
+      Responsible party: Under investigation
+      -->
+    </div>
+  </section>
+  <footer style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
+    <p>Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
+  </footer>
+  </div>
+  <!-- Validación y overlay eliminados: acceso libre -->
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+  </body>
+  </html>

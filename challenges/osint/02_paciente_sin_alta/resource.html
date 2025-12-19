@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paciente sin alta · Hospital Saint Anima</title>
+  <link rel="stylesheet" href="../../../templates/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../../../assets/logo_saint_anima.png" alt="Hospital Saint Anima logo">
+      <div>
+        <h1>Hospital Saint Anima</h1>
+      </div>
+      <div class="meta small">
+        Ref: HSA-CTF-2025<br>
+        Unidad: Planta 4 · Medicina Interna
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="meta"><a class="back" href="../../../intro.html" target="_self">⟵ Volver a Inicio</a></div>
+    </div>
+
+
+    <div class="notice">
+      <strong>Contexto:</strong> Tras recuperar el expediente borrado, se revisa un extracto administrativo que menciona una transferencia no registrada.
+      <br>
+      <strong>Objetivo:</strong> Correlacionar el extracto con la fuga del paciente sin alta.
+      <br>
+      <details class="hint">
+        <summary>Pista</summary>
+        <div class="hint-body">El bloque final está en Base64; al decodificarlo se revela la referencia clave.</div>
+      </details>
+    </div>
+
+    <div class="section">
+      <h2>Informe administrativo - expediente parcial</h2>
+      <p><strong>Extracto:</strong></p>
+      <pre class="code">expediente: SA-0404-105
+fecha: 2025-07-30
+nota: "transferido a planta inexistente"
+firma de operación: UGFjaWVudGUgc2VsZWNjaW9uYWRvIHBhcmEgcHJveWVjdG8gIkFuaW1hIi4gSUQgZGUgdHJhbnNmZXJlbmNpYTogRkxBR3tBTklNQX0
+</pre>
+      <section style="margin-top:14px">
+        <h3>Observaciones adicionales</h3>
+        <p>Parece que alguien se ha dejado iniciada la sesión en SocialMed (red social corporativa)</p>
+        <!-- Para los jugadores: el bloque adjunto está codificado en Base64; decodifícalo para revelar la pista. -->
+      </section>
+
+
+    </div>
+
+
+    <footer style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
+      <p>Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
+    </footer>
+  </div>
+
+  <!-- Gate overlay: require flag from reto 01 to view this resource -->
+  <div id="gate" class="gate-overlay" aria-hidden="false">
+    <div class="gate-box">
+      <h3>Acceso restringido</h3>
+      <p>Este documento está protegido. Introduce la clave obtenida en el reto 01 para abrirlo.</p>
+      <label for="flag-input">Clave de acceso (ej. FLAG{...} o solo el contenido):</label>
+      <input id="flag-input" type="text" placeholder="" aria-label="Clave de acceso">
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="flag-submit">Abrir documento</button>
+        <a class="back" href="../../../intro.html"
+          style="display:inline-block;align-self:center;padding:8px 12px;background:#6b7280;color:#fff;border-radius:6px;text-decoration:none">Volver</a>
+      </div>
+      <div id="gate-error" class="gate-error" role="alert" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="../../../templates/ctf-config.js"></script>
+  <script>
+    (function () {
+      const CHALLENGE_ID = 'osint:02';
+      const gate = document.getElementById('gate');
+      const input = document.getElementById('flag-input');
+      const btn = document.getElementById('flag-submit');
+      const err = document.getElementById('gate-error');
+      function unlock() {
+        gate.style.display = 'none';
+        gate.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('ctf-locked');
+        sessionStorage.setItem('gate:' + CHALLENGE_ID, '1');
+      }
+      if (sessionStorage.getItem('gate:' + CHALLENGE_ID) === '1') {
+        unlock();
+      } else {
+        document.body.classList.add('ctf-locked');
+      }
+      btn.addEventListener('click', function () {
+        err.textContent = '';
+        const val = input.value.trim();
+        if (window.CTF && CTF.validateKeyFor(CHALLENGE_ID, val)) {
+          unlock();
+        } else {
+          err.textContent = 'Clave incorrecta. Inténtalo de nuevo.';
+        }
+      });
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') btn.click(); });
+    })();
+  </script>
+
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+</body>
+
+</html>

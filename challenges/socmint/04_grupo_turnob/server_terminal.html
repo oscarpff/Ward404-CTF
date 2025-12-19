@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Server Room 203 - Terminal</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    width: 100%;
+  }
+  
+  body {
+    background: #0a0a0a;
+    font-family: 'Courier New', 'Consolas', monospace;
+    color: #00ff00;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+  
+  .terminal-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #1a1a1a;
+  }
+  
+  .terminal-header {
+    background: #2a2a2a;
+    padding: 12px 16px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  
+  .terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .btn-close { background: #ff5f56; }
+  .btn-minimize { background: #ffbd2e; }
+  .btn-maximize { background: #27c93f; }
+  
+  .terminal-title {
+    color: #888;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+  
+  #terminal {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #output {
+    flex: 1;
+    margin-bottom: 12px;
+  }
+  
+  .output-line {
+    margin: 2px 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  .cmd-echo {
+    color: #ffff00;
+    margin: 6px 0;
+    font-weight: bold;
+    background: #2a2a1a;
+    padding: 2px 4px;
+    border-left: 2px solid #ffff00;
+    padding-left: 8px;
+  }
+  
+  .cmd-result {
+    color: #00ff00;
+    margin: 2px 0;
+  }
+  
+  .prompt-line {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+  
+  .prompt-text {
+    color: #888;
+    white-space: nowrap;
+  }
+  
+  #cmd-input {
+    background: transparent;
+    border: none;
+    color: #ffff00;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    flex: 1;
+    caret-color: #ffff00;
+  }
+  
+  .error { 
+    color: #ff6b6b; 
+    background: #2a0a0a;
+    padding: 2px 4px;
+    border-left: 2px solid #ff6b6b;
+    padding-left: 8px;
+    margin: 2px 0;
+  }
+  
+  .success { 
+    color: #51cf66;
+    background: #0a2a0a;
+    padding: 2px 4px;
+    border-left: 2px solid #51cf66;
+    padding-left: 8px;
+    margin: 2px 0;
+  }
+  
+  .warning { color: #ffd43b; }
+  .info { color: #74c0fc; }
+  
+  .flag { 
+    color: #000;
+    background: #ffd700;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 6px 0;
+  }
+  
+  .login-box {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 20px;
+    border-radius: 6px;
+    max-width: 400px;
+    margin: 40px auto;
+  }
+  
+  .login-box h3 {
+    color: #00ff00;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .login-box input {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #ffff00;
+    font-family: inherit;
+    border-radius: 4px;
+  }
+  
+  .login-box input::placeholder {
+    color: #666;
+  }
+  
+  .login-box button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    background: #00ff00;
+    color: #0a0a0a;
+    border: none;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .login-box button:hover {
+    background: #00dd00;
+  }
+  
+  .login-error {
+    color: #ff6b6b;
+    margin-top: 8px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #74c0fc;
+    text-decoration: none;
+  }
+  
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  #terminal::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  #terminal::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+
+  #terminal::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 5px;
+  }
+
+  #terminal::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="login-box">
+  <h3>🔐 SAINT ANIMA - Server Room</h3>
+  <p style="color: #888; font-size: 14px; text-align: center; margin-bottom: 16px;">Sistema de auditoría de pacientes</p>
+  <label style="color: #888; font-size: 13px;">Usuario:</label>
+  <input type="text" id="login-id" placeholder="" autocomplete="off">
+  <label style="color: #888; font-size: 13px;">Contraseña:</label>
+  <input type="password" id="login-pass" placeholder="" autocomplete="off">
+  <button id="login-btn">Conectar</button>
+  <div id="login-error" class="login-error"></div>
+  <a href="resource.html" class="back-link">← Volver al chat</a>
+</div>
+
+<div class="terminal-container" id="terminal-container" style="display:none;">
+  <div class="terminal-header">
+    <span class="terminal-button btn-close"></span>
+    <span class="terminal-button btn-minimize"></span>
+    <span class="terminal-button btn-maximize"></span>
+    <span class="terminal-title">root@server-room-203:~</span>
+    <span style="flex:1"></span>
+    <a href="resource.html" style="color:#fff;text-decoration:none;font-size:12px;padding:8px 12px;border-radius:6px;background:#3b82f6;border:1px solid #2563eb;">← Volver</a>
+  </div>
+  <div id="terminal">
+    <div id="output"></div>
+    <div class="prompt-line">
+      <span class="prompt-text">root@server-203:~$</span>
+      <input type="text" id="cmd-input" autofocus autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Login system
+  const loginScreen = document.getElementById('login-screen');
+  const terminalContainer = document.getElementById('terminal-container');
+  const loginBtn = document.getElementById('login-btn');
+  const loginId = document.getElementById('login-id');
+  const loginPass = document.getElementById('login-pass');
+  const loginError = document.getElementById('login-error');
+  
+  const validCredentials = [
+    { username: 'admin', pass: 'admin', role: 'admin' },
+    { username: 'enf_carlos', pass: 'SA-0404-999', role: 'nurse' },
+    { username: 'enf-carlos', pass: 'SA-0404-999', role: 'nurse' },
+    { username: 'carlos', pass: 'SA-0404-999', role: 'nurse' }
+  ];
+  
+  function checkLogin() {
+    const user = loginId.value.trim().toLowerCase();
+    const pass = loginPass.value.trim();
+    
+    const cred = validCredentials.find(c => user === c.username.toLowerCase() && pass === c.pass);
+    
+    if (cred) {
+      loginScreen.style.display = 'none';
+      terminalContainer.style.display = 'flex';
+      initTerminal(cred.username, cred.role);
+    } else {
+      loginError.textContent = '❌ Credenciales incorrectas. Prueba con admin/admin o busca la pista en el chat (ID del paciente marcado).';
+    }
+  }
+  
+  loginBtn.addEventListener('click', checkLogin);
+  loginId.addEventListener('keydown', (e) => { if(e.key === 'Enter') loginPass.focus(); });
+  loginPass.addEventListener('keydown', (e) => { if(e.key === 'Enter') checkLogin(); });
+  
+  // Terminal system
+  function initTerminal(username, role) {
+    const output = document.getElementById('output');
+    const cmdInput = document.getElementById('cmd-input');
+    const terminal = document.getElementById('terminal');
+    let currentUser = username;
+    let currentRole = role;
+    let history = [];
+    let historyIndex = -1;
+
+    const fileSystemAdmin = {
+      'README.md': `=== SERVER ROOM 203 - ACCESO BÁSICO (admin) ===
+Acceso limitado. Para auditoría completa, se requiere credencial de supervisor de turno (enf_carlos).
+
+Pista: El paciente marcado (ID completo) es la clave de escalado.
+Comando para escalar: su enf_carlos <ID_COMPLETO>
+
+Archivos visibles en modo admin:
+ - patient_table.txt (estado de pacientes turno B)
+ - readme (este archivo)
+`,
+      'patient_table.txt': `=== TABLA PACIENTES - TURNO B ===
+ID          | Ingreso     | Estado                   | Ubicación
+---------------------------------------------------------------
+SA-0404-118 | 2025-10-08  | Ingresado               | Planta 4
+SA-0404-203 | 2025-10-06  | Esperando alta          | Planta 3
+SA-0404-445 | 2025-10-05  | Alta autorizada         | -
+SA-0404-567 | 2025-10-09  | Ingresado               | Planta 4
+SA-0404-999 | 2025-10-08  | ⚠️ MARCADO EXPERIMENTO  | Sala 203
+`
+    };
+
+    const fileSystemNurse = {
+      'README.md': `=== SERVER ROOM 203 - INVESTIGATIVE LOG ===
+Classification: CONFIDENTIAL - INTERNAL USE ONLY
+Last audit: 2025-10-10 02:30 UTC
+
+This server maintains critical patient records for Saint Anima Hospital.
+Investigation status: ONGOING - Unauthorized access detected.
+
+--- KEY FINDINGS ---
+1. Patient SA-0404-999: Irregularly marked for transfer (see access_control.log)
+2. Timeline inconsistency: Entry marked in database BEFORE medical authorization
+3. Personnel involved: Turno B night shift staff (see personnel_timeline.log)
+
+--- INVESTIGATION CHAIN ---
+For full timeline, check:
+  - access_control.log (WHO accessed what)
+  - personnel_timeline.log (WHEN and WHY)
+  - protocol_violations.log (WHAT was violated)
+  - alert_system.log (SYSTEM ALERTS - CRITICAL)
+
+Start with 'cat access_control.log' to trace the pattern.`,
+      
+      'patient_logs.txt': `=== PATIENT DATABASE - OFFICIAL RECORDS ===
+Hospital: Saint Anima Medical Center
+Database: Patient Management System v2.4.1
+Last sync: 2025-10-10 00:15:23
+
+--- ACTIVE PATIENTS (Planta 4 - Medicina Interna) ---
+SA-0404-118 [ACTIVE]
+  Admission: 2025-10-08 14:30
+  Physician: Dr. Carlos Martinez
+  Diagnosis: Standard internal medicine follow-up
+  Status: Stable, routine monitoring
+  Last update: 2025-10-09 19:45
+
+SA-0404-203 [DISCHARGE_PENDING]
+  Admission: 2025-10-06 08:15
+  Physician: Dr. Wei Chen
+  Diagnosis: Post-procedural recovery
+  Status: Ready for discharge, awaiting final paperwork
+  Last update: 2025-10-09 16:20
+
+SA-0404-445 [DISCHARGED]
+  Admission: 2025-10-05 10:00
+  Physician: Dr. Miguel Lopez
+  Diagnosis: Routine check-up
+  Discharge: 2025-10-07 15:30
+  Status: CLOSED - Patient left facility
+
+SA-0404-567 [ACTIVE]
+  Admission: 2025-10-09 22:15
+  Physician: Dr. Hana Kim
+  Diagnosis: Emergency internal medicine
+  Status: Stable, under observation
+  Last update: 2025-10-09 23:50
+
+--- ANOMALY DETECTED ---
+SA-0404-999 [FLAGGED FOR REVIEW]
+  Admission: 2025-10-08 14:45
+  Physician: DR. UNKNOWN (ERROR - NOT IN SYSTEM)
+  Status: ⚠️ DISCREPANCY - Record shows transfer authorization
+           ISSUE: No corresponding medical order found
+  Action Required: See alert_system.log for details
+  Security Note: See protocol_violations.log
+
+⚠️ Database integrity check: 1 anomaly detected
+Run 'cat protocol_violations.log' for detailed breach report.`,
+      
+      'personnel_timeline.log': `=== PERSONNEL ACTIVITY TIMELINE - TURNO B (NIGHT SHIFT) ===
+Date: 2025-10-09 to 2025-10-10
+Duration: 22:00 to 08:00 UTC
+
+--- SHIFT ROSTER ---
+@enf_carlos (Senior Nurse) - On duty 22:00-08:00
+@enf_ana (Junior Nurse) - On duty 23:00-07:00
+@carla_turnoB (Auxiliary) - On duty 00:00-08:00
+@miguel_admin (Administrator) - Called in ~23:30
+
+--- TIMELINE OF EVENTS ---
+[2025-10-09 22:45] @enf_carlos: System login (Patient access)
+[2025-10-09 23:30] @miguel_admin: Emergency login (Admin credentials)
+[2025-10-09 23:45] @miguel_admin: Database query (Patient SA-0404-999)
+[2025-10-10 00:05] @enf_ana: System login (Patient access)
+[2025-10-10 00:06] @enf_carlos: Transfer order initiated
+[2025-10-10 00:12] @carla_turnoB: System login (Confirmation)
+[2025-10-10 00:15] SYSTEM: Patient SA-0404-999 marked for experimental protocol
+[2025-10-10 00:18] SYSTEM: ⚠️ PROTOCOL BREACH - No medical authorization found
+
+--- ANALYSIS ---
+All three nurses logged in within 15-minute window.
+Admin credentials used before any patient access.
+Transfer marked BEFORE proper authorization chain.
+
+Recommendation: Cross-reference with alert_system.log for full incident report.`,
+      
+      'protocol_violations.log': `=== PROTOCOL VIOLATION REPORT ===
+Incident ID: BREACH-2025-1010-001
+Severity: CRITICAL
+Date Detected: 2025-10-10 00:18 UTC
+Status: ESCALATED TO SECURITY
+
+--- VIOLATION DETAILS ---
+Patient: SA-0404-999
+Violation Type: Unauthorized Medical Procedure Authorization
+Violation Date: 2025-10-10 00:06 - 00:15 UTC
+
+--- REGULATORY VIOLATION CHAIN ---
+1. MEDICAL AUTHORIZATION MISSING
+   Expected: Written order from licensed physician
+   Found: System entry only (no physician signature)
+
+2. AUDIT TRAIL INCOMPLETE
+   Expected: Complete chain of custody for patient records
+   Found: Gaps in authorization documentation
+   Missing: Dr. authorization paperwork
+
+3. PATIENT CONSENT MISSING
+   Expected: Patient informed consent form
+   Found: NO RECORD
+
+4. UNUSUAL TRANSFER PATTERN
+   Expected: Standard discharge or inter-department transfer
+   Found: EXPERIMENTAL PROTOCOL TRANSFER
+   Reference: See alert_system.log for automated alerts
+
+--- PERSONNEL INVOLVED ---
+Primary actors identified: Turno B night shift staff
+Suspicious pattern: Coordinated system access within 12 minutes
+Admin involvement: @miguel_admin provided credentials access
+
+--- INVESTIGATION STATUS ---
+🚨 CASE ACTIVE - Further analysis required
+See alert_system.log for detailed system alerts and conclusion.`,
+      
+      'alert_system.log': `=== SYSTEM SECURITY ALERTS - COMPREHENSIVE LOG ===
+Server: Saint Anima Hospital - Room 203
+Date Range: 2025-10-09 22:00 to 2025-10-10 02:30 UTC
+Total Alerts: 47 (42 normal, 5 critical)
+
+--- ROUTINE ALERTS (Filtered: showing critical only) ---
+[2025-10-09 22:45:12] INFO: User @enf_carlos login successful
+[2025-10-09 23:30:45] INFO: User @miguel_admin login with admin credentials
+[2025-10-09 23:45:33] INFO: Database query executed - Patient ID: SA-0404-999
+
+--- ⚠️ CRITICAL ALERTS ---
+[2025-10-10 00:06:18] CRITICAL: Unauthorized transfer order detected
+  Patient: SA-0404-999
+  Order source: @enf_carlos terminal
+  Authorization check: FAILED - No physician signature
+  Medical protocol: BYPASSED
+
+[2025-10-10 00:12:47] CRITICAL: Transfer marked as EXPERIMENTAL PROTOCOL
+  Protocol type: Unknown (not in hospital system)
+  Destination: Sala 203 - Server Room
+  Patient consent: NOT FOUND
+  Physician authorization: NOT FOUND
+  Flag status: INVESTIGATION INITIATED
+
+[2025-10-10 00:15:22] CRITICAL: Automated alarm triggered
+  Issue: Patient marked without medical authorization
+  Severity: CRITICAL - Potential breach of medical protocols
+  Action: Escalating to security team
+
+[2025-10-10 00:18:05] CRITICAL: Pattern analysis complete
+  Pattern: Coordinated unauthorized access
+  Actors: @enf_carlos, @enf_ana, @carla_turnoB, @miguel_admin
+  Coordination time: 12 minutes between first access and marking
+  Assessment: NOT ACCIDENTAL - Appears coordinated
+
+[2025-10-10 00:25:33] CRITICAL: Evidence flagged for investigation
+  Evidence type: System logs, access records, patient database anomalies
+  Conclusion: Unauthorized experimental protocol activation detected
+  Alert code: PATIENT_COMPROMISED
+  Full report: In protocol_violations.log
+
+--- INVESTIGATION CLOSURE ---
+🚨 KEY FINDING: Patient SA-0404-999 marked without authorization
+   Responsible personnel: Turno B night shift + Admin access
+   Medical protocol: VIOLATED
+   Patient safety: COMPROMISED
+   
+EVIDENCE RECOVERED: Multiple system violations documented
+INCIDENT CLASSIFICATION: MEDICAL ETHICS VIOLATION + POTENTIAL DATA BREACH
+
+>>> ALERT FLAG GENERATED <<<
+Encoded evidence: RkxBR3tQQVRJRU5UX0NPTVBST01JU0VEfQ==
+
+This incident requires immediate investigation by hospital security.`,
+      
+      'access_control.log': `=== ACCESS CONTROL SYSTEM LOG ===
+Server: Saint Anima Hospital - Room 203
+Monitoring period: 2025-10-09 20:00 UTC to 2025-10-10 06:00 UTC
+
+--- CREDENTIAL USAGE TIMELINE ---
+[2025-10-09 22:30] Access granted: @enf_carlos (Nurse credential)
+[2025-10-09 23:20] Access granted: @miguel_admin (Admin credential - UNUSUAL TIME)
+[2025-10-09 23:45] Database access: @miguel_admin queries patient SA-0404-999
+[2025-10-10 00:05] Access granted: @enf_ana (Nurse credential)
+[2025-10-10 00:06] PATIENT RECORD MODIFIED: SA-0404-999 (by @enf_carlos)
+[2025-10-10 00:12] Access granted: @carla_turnoB (Auxiliary credential)
+[2025-10-10 00:15] SYSTEM LOCK: Patient SA-0404-999 - FLAGGED
+[2025-10-10 00:18] AUTOMATIC ESCALATION: Security alert generated
+[2025-10-10 02:00] Manual review initiated by: sys_admin
+
+--- RISK ASSESSMENT ---
+Access pattern: SUSPICIOUS
+  - Admin called in during night shift (unusual)
+  - Query executed on specific patient before marking
+  - Three staff members access within 12 minutes
+  - All from Turno B night shift crew
+  
+Pattern assessment: NOT RANDOM - Appears coordinated
+
+--- SECURITY RECOMMENDATIONS ---
+1. Review credentials for @miguel_admin activity
+2. Interview Turno B staff about patient SA-0404-999
+3. Cross-reference with hospital authorization system
+4. Check for communication logs between personnel
+
+Status: ACTIVE INVESTIGATION`
+    };
+    
+    function getFS() {
+      return currentRole === 'nurse' ? fileSystemNurse : fileSystemAdmin;
+    }
+    
+    const commands = {
+      help: () => `Available commands:
+  ls              - List files in current directory
+  cat [file]      - Display file contents
+  pwd             - Print working directory path
+  whoami          - Display current user (investigator)
+  clear           - Clear terminal screen
+  grep [term]     - Search for term in all files (experimental)
+  b64 [base64]    - Decode base64-encoded string
+  exit            - Logout and return to login screen
+  help            - Show this help menu
+
+--- INVESTIGATION GUIDE ---
+Start with: cat README.md
+Then explore: access_control.log → personnel_timeline.log → patient_logs.txt
+Critical file: alert_system.log (contains incident conclusion)`,
+      
+      ls: () => Object.keys(getFS()).join('\n'),
+      
+      pwd: () => '/srv/hospital/room-203/investigations/',
+      
+      whoami: () => `${currentUser}@server-room-203 (${currentRole === 'nurse' ? 'Supervisor - Turno B' : 'admin'})`,
+      
+      grep: (args) => {
+        const searchTerm = args.join(' ').toLowerCase();
+        if (!searchTerm) return '<span class="error">grep: missing search term</span>';
+        
+        let results = [];
+        for (const [filename, content] of Object.entries(getFS())) {
+          if (content.toLowerCase().includes(searchTerm)) {
+            const lines = content.split('\n');
+            const matches = lines.filter(line => line.toLowerCase().includes(searchTerm));
+            results.push(`\n--- ${filename} ---`);
+            results.push(...matches.slice(0, 3));
+          }
+        }
+        return results.length > 1 ? results.join('\n') : `<span class="error">grep: No matches found for "${searchTerm}"</span>`;
+      },
+      
+      cat: (args) => {
+        const filename = args[0];
+        if (!filename) return '<span class="error">cat: missing file operand</span>';
+        const fs = getFS();
+        if (fs[filename]) return fs[filename];
+        return `<span class="error">cat: ${filename}: No such file or directory</span>`;
+      },
+
+      b64: (args) => {
+        const data = (args || []).join(' ').trim();
+        if (!data) return '<span class="error">b64: missing base64 input</span>';
+        try {
+          const decoded = atob(data);
+          return decoded || '<span class="warning">(decoded to empty string)</span>';
+        } catch (e) {
+          return '<span class="error">b64: invalid base64</span>';
+        }
+      },
+
+      su: (args) => {
+        const target = args[0];
+        const pw = args[1];
+        if (!target || !pw) return '<span class="error">su: usage: su <usuario> <clave></span>';
+        const cred = validCredentials.find(c => c.username.toLowerCase() === target.toLowerCase() && c.pass === pw && c.role === 'nurse');
+        if (cred) {
+          currentUser = cred.username;
+          currentRole = cred.role;
+          addOutput('Elevated privileges to supervisor (enf_carlos). Full logs unlocked.', 'success');
+          return null;
+        }
+        return '<span class="error">su: authentication failed</span>';
+      },
+      
+      clear: () => {
+        output.innerHTML = '';
+        return null;
+      },
+      
+      exit: () => {
+        addOutput('Logging out from investigation session...', 'success');
+        setTimeout(() => {
+          terminalContainer.style.display = 'none';
+          loginScreen.style.display = 'block';
+          loginId.value = '';
+          loginPass.value = '';
+          loginError.textContent = '';
+        }, 1000);
+        return null;
+      }
+    };
+    
+    function addOutput(text, cssClass = '', isCommand = false) {
+      if (text === null) return;
+      const line = document.createElement('div');
+      line.className = 'output-line' + (cssClass ? ' ' + cssClass : '');
+      line.innerHTML = text;
+      output.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+    
+    function processCommand(input) {
+      const trimmed = input.trim();
+      if (!trimmed) return;
+      
+      // Mostrar comando introducido
+      addOutput(`$ ${trimmed}`, 'cmd-echo');
+      // Guardar en historial
+      history.push(trimmed);
+      historyIndex = history.length;
+      
+      const parts = trimmed.split(' ');
+      const cmd = parts[0].toLowerCase();
+      const args = parts.slice(1);
+      
+      if (commands[cmd]) {
+        const result = commands[cmd](args);
+        if (result !== null) {
+          addOutput(result, 'cmd-result');
+        }
+      } else {
+        addOutput(`bash: ${cmd}: command not found`, 'error');
+      }
+    }
+    
+    cmdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = cmdInput.value;
+        processCommand(cmd);
+        cmdInput.value = '';
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        handleTabCompletion();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (history.length > 0) {
+          if (historyIndex === history.length) {
+            // si estamos al final, mostrar el último
+            historyIndex = history.length - 1;
+          } else if (historyIndex > 0) {
+            historyIndex--;
+          }
+          cmdInput.value = history[historyIndex] || '';
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (history.length > 0) {
+          if (historyIndex < history.length - 1) {
+            historyIndex++;
+            cmdInput.value = history[historyIndex];
+          } else {
+            // salir del historial
+            historyIndex = history.length;
+            cmdInput.value = '';
+          }
+        }
+      }
+    });
+    
+    function handleTabCompletion() {
+      const input = cmdInput.value.trim();
+      const parts = input.split(' ');
+      const currentPart = parts[parts.length - 1];
+      
+      // Si es el primer argumento, buscar comandos
+      if (parts.length === 1) {
+        const allCommands = Object.keys(commands);
+        const matches = allCommands.filter(cmd => cmd.startsWith(currentPart.toLowerCase()));
+        
+        if (matches.length === 1) {
+          cmdInput.value = matches[0] + ' ';
+        } else if (matches.length > 1) {
+          addOutput(`Available: ${matches.join(', ')}`, 'info');
+        }
+      } 
+      // Si es argumento de cat, buscar archivos
+      else if (parts.length === 2 && parts[0].toLowerCase() === 'cat') {
+        const allFiles = Object.keys(getFS());
+        const matches = allFiles.filter(file => file.toLowerCase().startsWith(currentPart.toLowerCase()));
+        
+        if (matches.length === 1) {
+          cmdInput.value = parts[0] + ' ' + matches[0];
+        } else if (matches.length > 1) {
+          addOutput(`Files: ${matches.join(', ')}`, 'info');
+        }
+      }
+      
+      cmdInput.focus();
+    }
+    
+    // Welcome message
+    addOutput('✓ Connection established', 'success');
+    addOutput(`Welcome ${currentUser} - Saint Anima Hospital Server Room 203`, 'info');
+    addOutput(`Role: ${currentRole === 'nurse' ? 'Supervisor - Turno B (full access)' : 'Admin (limited access)'}`, 'info');
+    addOutput('Type <span class="warning">help</span> for available commands.\n', 'cmd-result');
+    
+    cmdInput.focus();
+  }
+})();
+</script>
+
+</body>
+</html>

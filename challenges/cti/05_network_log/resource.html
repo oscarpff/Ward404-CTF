@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>05 - Rastreando la transferencia · Hospital Saint Anima</title>
+  <link rel="stylesheet" href="../../../templates/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../../../assets/logo_saint_anima.png" alt="Logo Saint Anima">
+      <div>
+        <h1>05 — Rastreando la transferencia</h1>
+      </div>
+      <div class="meta small">
+        Ref: HSA-CTF-2025<br>
+        Unidad: Planta 4 · Medicina Interna
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="meta"><a class="back" href="../../../intro.html" target="_self">⟵ Volver a Inicio</a></div>
+    </div>
+
+    <div class="notice">
+      <strong>Contexto:</strong> Tras leer el chat del turno B y entrar al servidor de la sala 203, se abre la consola de monitoreo de red
+      <br>
+      <strong>Objetivo:</strong> Identificar la conexión saliente anómala y registrar la evidencia desde la consola.
+      <br>
+      <details class="hint">
+        <summary>Pista</summary>
+        <div class="hint-body">La consola muestra flujos salientes; filtra por el destino sospechoso y toma nota de la IP/puerto utilizados.</div>
+      </details>
+    </div>
+
+    <div class="section">
+      <div class="card">
+        <h3>🖥️ Consola NetMon</h3>
+        <p class="small">Abre la terminal y navega los artefactos disponibles. No hay más documentos de apoyo.</p>
+        <p class="small meta" style="margin-top:12px; text-align:center;">
+          <a class="cta" href="network_console.html" style="display:inline-block; padding:8px 16px; font-size:0.95em;">Abrir consola CTI</a>
+        </p>
+      </div>
+    </div>
+
+    <footer class="footer" style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
+      <p>Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
+    </footer>
+  </div>
+
+  <img class="watermark" src="../../../assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Visor EXIF local — CTF-MUCS</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;margin:0;background:#f6f7fb;color:#111}
+    .wrap{max-width:880px;margin:36px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(22,28,45,0.08)}
+    h1{font-size:20px;margin:0 0 8px}
+    p.lead{margin:0 0 14px;color:#444}
+    .drop{border:2px dashed #d0d6e6;border-radius:8px;padding:18px;text-align:center;background:#fbfcff;display:flex;align-items:center;justify-content:center;flex-direction:column;box-sizing:border-box;width:100%;min-height:120px;position:relative;transition:box-shadow .12s ease, border-color .12s ease, background-color .12s ease}
+    .drop:hover{box-shadow:0 6px 18px rgba(11,99,255,0.06);border-color:#9fb8ff}
+    .drop.dragover{background:#eef4ff;border-color:#79a7ff}
+    input[type=file]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;margin:0;padding:0}
+    .meta{margin-top:16px}
+    .meta pre{white-space:pre-wrap;background:#f4f6fb;border-radius:6px;padding:12px;font-size:13px}
+    .thumb{display:block;margin:14px auto 0;max-width:320px;max-height:240px;border-radius:6px;border:1px solid #e6eefc}
+    .small{font-size:13px;color:#666}
+    footer{margin-top:18px;font-size:13px;color:#666}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:#0b63ff;color:#fff;text-decoration:none;border:0;cursor:pointer;box-shadow:0 6px 14px rgba(11,99,255,0.12);transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease;font-weight:600}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(11,99,255,0.14);background:#0757e6}
+    .btn:active{transform:translateY(0) scale(.99)}
+    .btn:focus-visible{outline:3px solid rgba(11,99,255,0.12);outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Visor EXIF (local)</h1>
+    <p class="lead">Esta página NO sube la imagen a ningún servidor — el procesamiento ocurre en tu navegador.</p>
+
+    <img id="thumb" class="thumb" alt="Preview" style="display:none">
+
+    <label class="drop" id="dropLabel">
+      <input id="fileInput" type="file" accept="image/jpeg,image/jpg,image/png">
+      <div id="dropText">Pulsa o arrastra un archivo aquí</div>
+    </label>
+
+    <div style="text-align:center;margin-top:12px">
+      <button id="scanBtn" class="btn" style="display:none">Escanear otro archivo</button>
+    </div>
+
+    <div class="meta" id="meta">
+      <p class="small">Resultados:</p>
+      <pre id="result">Ningún archivo procesado aún.</pre>
+    </div>
+
+    <footer>Consejo: si la etiqueta <code>UserComment</code> comienza con <code>UNICODE</code> puede necesitar decodarse como UTF-16. Esta herramienta intenta manejar los casos más comunes.</footer>
+  </main>
+
+  <script>
+  // Minimal EXIF extractor focused on ImageDescription (0x010E) and UserComment (0x9286).
+  (function(){
+    const fileInput = document.getElementById('fileInput');
+    const scanBtn = document.getElementById('scanBtn');
+    const dropLabel = document.getElementById('dropLabel');
+    const dropText = document.getElementById('dropText');
+    const result = document.getElementById('result');
+    // initial state: show drop label, hide scan button
+    dropLabel.style.display = 'flex';
+    scanBtn.style.display = 'none';
+
+    // drag/drop handlers
+    ['dragenter','dragover'].forEach(ev=>{
+      dropLabel.addEventListener(ev, (e)=>{ e.preventDefault(); e.stopPropagation(); dropLabel.classList.add('dragover'); dropText.textContent = 'Suelta para analizar'; });
+    });
+    ['dragleave','drop'].forEach(ev=>{
+      dropLabel.addEventListener(ev, (e)=>{ e.preventDefault(); e.stopPropagation(); dropLabel.classList.remove('dragover'); dropText.textContent = 'Pulsa o arrastra un archivo aquí'; });
+    });
+    dropLabel.addEventListener('drop', e=>{
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if(f) {
+        handleFile(f);
+        // after first analysis, hide drop area and show scan button
+        dropLabel.style.display = 'none';
+        scanBtn.style.display = 'inline-block';
+      }
+    });
+
+    // file selection handler
+    fileInput.addEventListener('change', e=>{
+      if(e.target.files && e.target.files[0]){
+        handleFile(e.target.files[0]);
+        try{ fileInput.blur(); }catch(_){}
+        // hide drop area after first use and show scan button
+        dropLabel.style.display = 'none';
+        scanBtn.style.display = 'inline-block';
+      }
+    });
+
+    // scan button: reveal drop area again so user can drag/select
+    scanBtn.addEventListener('click', ()=>{
+      dropLabel.style.display = 'flex';
+      scanBtn.style.display = 'none';
+      try{ dropLabel.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){}
+    });
+
+    let currentObjectUrl = null;
+    function handleFile(file){
+      // set preview thumbnail using object URL (fast, no extra memory copy)
+      const thumb = document.getElementById('thumb');
+      if(currentObjectUrl){ try{ URL.revokeObjectURL(currentObjectUrl); }catch(e){} }
+      currentObjectUrl = URL.createObjectURL(file);
+      thumb.src = currentObjectUrl;
+      thumb.style.display = 'block';
+      // ensure thumb is scrolled into view (thumb is first element now)
+      try{ thumb.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){}
+
+      result.textContent = `Procesando: ${file.name} (${Math.round(file.size/1024)} KB)`;
+      const reader = new FileReader();
+      reader.onload = function(){
+        try{
+          const buf = reader.result;
+          const tags = parseExif(new DataView(buf));
+          showTags(tags, file.name);
+        }catch(err){
+          result.textContent = 'Error al parsear EXIF: '+err;
+        }
+      };
+      reader.onerror = ()=> result.textContent = 'Error leyendo archivo.';
+      reader.readAsArrayBuffer(file);
+    }
+
+    function showTags(tags, name){
+      const out = [];
+      out.push(`Archivo: ${name}`);
+      if(!tags.found) {
+        out.push('No se encontró segmento EXIF (APP1) o no es JPEG.');
+      } else {
+        out.push('ImageDescription: ' + (tags.ImageDescription||'(no presente)'));
+        out.push('UserComment: ' + (tags.UserComment||'(no presente)'));
+        out.push('\n--- RAW TAGS ---');
+        out.push(JSON.stringify(tags.raw||{}, null, 2));
+      }
+      result.textContent = out.join('\n');
+    }
+
+    // --- EXIF parsing helpers ---
+    function findAPP1(view){
+      // assume JPEG: 0xFFD8 start
+      if(view.getUint16(0) !== 0xFFD8) throw 'No es JPEG (cabecera SOI no encontrada)';
+      let offset = 2;
+      const length = view.byteLength;
+      while(offset < length){
+        const marker = view.getUint16(offset);
+        offset += 2;
+        if(marker === 0xFFE1){
+          const segLen = view.getUint16(offset);
+          // APP1 payload starts at offset+2
+          return {start: offset+2, size: segLen-2};
+        }
+        // skip segment
+        const segLen = view.getUint16(offset);
+        offset += segLen;
+      }
+      return null;
+    }
+
+    function parseIFD(view, tiffStart, ifdOffset, littleEndian){
+      const tags = {};
+      const num = view.getUint16(tiffStart + ifdOffset, littleEndian);
+      let off = tiffStart + ifdOffset + 2;
+      for(let i=0;i<num;i++){
+        const tag = view.getUint16(off, littleEndian);
+        const type = view.getUint16(off+2, littleEndian);
+        const count = view.getUint32(off+4, littleEndian);
+        const valueOffset = off+8;
+        let value;
+        // types: 1=BYTE,2=ASCII,3=SHORT,4=LONG,5=RATIONAL,7=UNDEFINED
+        const typeSize = ({1:1,2:1,3:2,4:4,5:8,7:1}[type]||1);
+        const valueByteCount = typeSize * count;
+        if(valueByteCount <= 4){
+          // value stored directly
+          value = view.buffer.slice(valueOffset, valueOffset+4);
+        } else {
+          const actualOffset = view.getUint32(valueOffset, littleEndian);
+          value = view.buffer.slice(tiffStart + actualOffset, tiffStart + actualOffset + valueByteCount);
+        }
+        tags[tag] = {type,typeName:type, count, raw: new Uint8Array(value)};
+        off += 12;
+      }
+      // next IFD pointer (4 bytes)
+      const nextIfd = view.getUint32(off, littleEndian);
+      return {tags, nextIfd};
+    }
+
+    function bytesToString(u8arr){
+      try{ return new TextDecoder('utf-8', {fatal:false}).decode(u8arr).replace(/\u0000+$/,''); }catch(e){
+        let s=''; for(let i=0;i<u8arr.length;i++) s+=String.fromCharCode(u8arr[i]); return s.replace(/\0+$/,'');
+      }
+    }
+
+    function decodeUserComment(u8arr){
+      // first 8 bytes may indicate encoding per EXIF spec
+      const header = bytesToString(u8arr.slice(0,8));
+      let data = u8arr.slice(8);
+
+      // strip leading null padding bytes (some writers put extra 0x00)
+      while(data.length > 1 && data[0] === 0) data = data.slice(1);
+
+      if(header.startsWith('ASCII')){
+        return bytesToString(data).replace(/\u0000+$/,'');
+      }
+
+      if(header.startsWith('UNICODE')){
+        // Heuristic: check which UTF-16 endianness is likely by counting zero bytes
+        // In UTF-16LE ASCII letters look like [xx,00,yy,00], zeros appear on odd indices.
+        // In UTF-16BE they appear on even indices [00,xx,00,yy].
+        const sampleLen = Math.min(40, data.length);
+        let zerosEven = 0, zerosOdd = 0;
+        for(let i=0;i<sampleLen;i++){
+          if(data[i] === 0){ (i%2===0) ? zerosEven++ : zerosOdd++; }
+        }
+        const likelyBE = zerosEven > zerosOdd;
+        try{
+          const enc = likelyBE ? 'utf-16be' : 'utf-16le';
+          return new TextDecoder(enc).decode(data).replace(/\u0000+$/,'');
+        }catch(e){
+          // fallback tries
+          try{ return new TextDecoder('utf-16le').decode(data).replace(/\u0000+$/,''); }catch(e){}
+          try{ return new TextDecoder('utf-16be').decode(data).replace(/\u0000+$/,''); }catch(e){}
+        }
+        return bytesToString(data).replace(/\u0000+$/,'');
+      }
+
+      // fallback: try utf-8 then raw string
+      try{ return new TextDecoder('utf-8').decode(u8arr).replace(/\u0000+$/,''); }catch(e){}
+      return bytesToString(u8arr).replace(/\u0000+$/,'');
+    }
+
+    function parseExif(view){
+      const found = findAPP1(view);
+      if(!found) return {found:false};
+      const start = found.start;
+      // check for 'Exif\0\0'
+      function getStr(off, len){
+        return String.fromCharCode.apply(null, new Uint8Array(view.buffer, off, len));
+      }
+      if(getStr(start,6) !== 'Exif\0\0') return {found:false};
+      const tiffStart = start + 6;
+      const byteOrder = getStr(tiffStart,2);
+      const littleEndian = byteOrder === 'II';
+      const fortyTwo = view.getUint16(tiffStart+2, littleEndian);
+      if(fortyTwo !== 42) throw 'TIFF header inesperado';
+      const ifd0Offset = view.getUint32(tiffStart+4, littleEndian);
+      const ifd0 = parseIFD(view, tiffStart, ifd0Offset, littleEndian);
+      const raw = {};
+      Object.keys(ifd0.tags).forEach(k=>{ raw[k]=Array.from(ifd0.tags[k].raw); });
+
+      // search for ImageDescription (0x010E)
+      let ImageDescription = null;
+      if(ifd0.tags[0x010E]){
+        ImageDescription = bytesToString(new Uint8Array(ifd0.tags[0x010E].raw));
+      }
+
+      // search for ExifIFDPointer (0x8769) to find UserComment in ExifSubIFD
+      let UserComment = null;
+      if(ifd0.tags[0x8769]){
+        const rawPtr = ifd0.tags[0x8769].raw;
+        const ptr = new DataView(rawPtr.buffer).getUint32(0, littleEndian);
+        const exifIfd = parseIFD(view, tiffStart, ptr, littleEndian);
+        Object.keys(exifIfd.tags).forEach(k=>{ raw['exif_'+k]=Array.from(exifIfd.tags[k].raw); });
+        if(exifIfd.tags[0x9286]){
+          const u = new Uint8Array(exifIfd.tags[0x9286].raw);
+          UserComment = decodeUserComment(u);
+        }
+      } else {
+        // maybe UserComment present in IFD0 (unlikely) — check directly
+        if(ifd0.tags[0x9286]){
+          const u = new Uint8Array(ifd0.tags[0x9286].raw);
+          UserComment = decodeUserComment(u);
+        }
+      }
+
+      return {found:true, ImageDescription, UserComment, raw};
+    }
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CTF-MUCS — Introducción</title>
+  <link rel="stylesheet" href="templates/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header" role="banner">
+      <img src="assets/logo_saint_anima.png" alt="Logo Saint Anima">
+      <div>
+        <h1 class="title">Ward 404 — Investigación Saint Anima</h1>
+      </div>
+      <div class="meta small">
+        Ref: HSA-CTF-2025<br>
+        Unidad: Planta 4 · Medicina Interna
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="card">
+        <h2>Resumen</h2>
+        <p>Un paciente identificado con ID: <strong>SA-0404-999</strong> es ingresado en el Hospital Saint Anima. Poco después, se detectan inconsistencias en varios expedientes clínicos, así como indicios de comunicaciones internas alteradas y registros que no encajan con los protocolos habituales del centro. Se sospecha que intentan borrar evidencias de un suceso anómalo".</p>
+        <p>La policía te ha pedido que investigues los hechos, infiltrándote como un paciente.</p>
+        <p>A partir de documentos médicos, imágenes, metadatos y registros técnicos dispersos, se hace necesario reconstruir los hechos y comprender qué ocurrió realmente dentro de la instalación, así como determinar que ha ocurrido con el paciente SA-0404-999.</p>
+        <p>La investigación se articula en torno a técnicas prácticas de <strong>OSINT</strong>, <strong>SOCMINT</strong> y <strong>CTI</strong>, con retos interconectados entre sí. Algunas evidencias solo pueden interpretarse correctamente al relacionar hallazgos previos, obligando a trazar una línea coherente entre personas, sistemas y eventos vinculados al paciente protagonista.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h4>Clave para el pentest final (nota)</h4>
+        <p>Para acceder al reto final (Pentest 07) son necesarias <strong>tres flags</strong>, una por cada categoría, y combinarlas en el campo de acceso:</p>
+        <ul>
+          <li><strong>OSINT</strong> — Reto 02</li>
+          <li><strong>SOCMINT</strong> — Reto 04</li>
+          <li><strong>CTI</strong> — Reto 06</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Retos</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:12px">
+        <article class="card">
+          <a class="cta" href="challenges/osint/01_historial/resource.html">01 — El historial borrado</a>
+          <p class="meta">OSINT · Fácil</p>
+        </article>
+
+        <article class="card">
+          <a class="cta" href="challenges/osint/02_paciente_sin_alta/resource.html">02 — Paciente sin alta</a>
+          <p class="meta">OSINT · Fácil</p>
+        </article>
+
+        <article class="card">
+          <a class="cta" href="challenges/socmint/03_post_enfermera/noche_enfermera_03.html">03 — La enfermera nocturna</a>
+          <p class="meta">SOCMINT · Media</p>
+        </article>
+
+        <article class="card">
+          <a class="cta" href="challenges/socmint/04_grupo_turnob/resource.html">04 — El grupo del turno B</a>
+          <p class="meta">SOCMINT + CTI · Media</p>
+        </article>
+
+        <article class="card">
+          <a class="cta" href="challenges/cti/05_network_log/resource.html">05 — El servidor del ala sur</a>
+          <p class="meta">CTI · Media</p>
+        </article>
+
+        <article class="card">
+          <a class="cta" href="challenges/cti/06_transferencia/resource.html">06 — Transferencia confirmada</a>
+          <p class="meta">CTI · Media</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Acceso a reto 07 (Pentest) -->
+    <section class="section">
+      <div class="card">
+        <h2>07 — Escape: Pentest Final</h2>
+        <p class="meta">Pentest · Media</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap">
+          <input id="pentest-flag-input" type="text" placeholder="FLAG{02}+FLAG{04}+FLAG{06}" aria-label="Clave de acceso al pentest" style="flex:1;min-width:220px;padding:10px;border:1px solid #e5eef4;border-radius:8px">
+          <button id="pentest-flag-submit" class="cta" style="padding:10px 14px;white-space:nowrap">Acceder a Pentest</button>
+          <button id="pentest-direct-btn" class="cta" style="padding:10px 14px;white-space:nowrap;display:none;background:#51cf66">▶ Ejecutar Pentest</button>
+        </div>
+        <div id="pentest-gate-error" class="gate-error" role="alert" aria-live="polite" style="color:#b91c1c;margin-top:8px;min-height:18px"></div>
+      </div>
+    </section>
+
+    <!-- Botón de resumen del CTF -->
+    <section class="section">
+      <div class="card">
+        <h2>Resumen del CTF</h2>
+        <p>Una vez que completes el pentest final, podrás ver el resumen completo con todas las FLAGS y respuestas.</p>
+        <div style="margin-top:12px">
+          <button id="summary-btn" class="cta" style="padding:10px 14px;opacity:0.5;cursor:not-allowed;border:none;background:#6b7280">📋 Ver Resumen (Bloqueado)</button>
+          <p id="summary-note" class="meta" style="margin-top:8px;display:none">✓ Resumen disponible</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
+      <p>Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
+    </footer>
+  </div>
+
+  <img class="watermark" src="assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+
+  <script src="templates/ctf-config.js"></script>
+  <script>
+    (function(){
+      const flagInput = document.getElementById('pentest-flag-input');
+      const flagBtn = document.getElementById('pentest-flag-submit');
+      const directBtn = document.getElementById('pentest-direct-btn');
+      const err = document.getElementById('pentest-gate-error');
+      
+      function attemptPentest() {
+        err.textContent = '';
+        const val = flagInput.value.trim();
+        if(window.CTF && CTF.validateCombinedFlags(val)){
+          try{ sessionStorage.setItem('pentest_unlocked', 'true'); }catch(e){}
+          window.location.href = 'challenges/07_escape/escape_console.html';
+        } else {
+          err.textContent = 'Clave incorrecta. Introduce las tres flags separadas por +.';
+        }
+      }
+      
+      flagBtn.addEventListener('click', attemptPentest);
+      flagInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') attemptPentest(); });
+      
+      // Check if pentest already unlocked
+      function checkPentestAccess() {
+        const unlocked = sessionStorage.getItem('pentest_unlocked') === 'true';
+        if (unlocked) {
+          flagInput.style.display = 'none';
+          flagBtn.style.display = 'none';
+          directBtn.style.display = 'inline-block';
+          directBtn.onclick = function() { window.location.href = 'challenges/07_escape/escape_console.html'; };
+        }
+      }
+      
+      checkPentestAccess();
+      window.addEventListener('storage', checkPentestAccess);
+    })();
+    
+    // Summary button logic
+    (function(){
+      const summaryBtn = document.getElementById('summary-btn');
+      const summaryNote = document.getElementById('summary-note');
+      
+      function checkSummaryAccess() {
+        const completed = sessionStorage.getItem('reto_07_completed') === 'true';
+        if (completed) {
+          summaryBtn.textContent = '📋 Ver Resumen';
+          summaryBtn.style.opacity = '1';
+          summaryBtn.style.cursor = 'pointer';
+          summaryBtn.style.background = '#3b82f6';
+          summaryNote.style.display = 'block';
+          summaryBtn.onclick = function(e) { 
+            e.preventDefault();
+            window.location.href = 'summary.html'; 
+          };
+        }
+      }
+      
+      checkSummaryAccess();
+      window.addEventListener('storage', checkSummaryAccess);
+    })();
+  </script>
+</body>
+</html>

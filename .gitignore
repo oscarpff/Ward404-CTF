@@ -1,0 +1,10 @@
+# Ignore solution and instructor folders
+_solutions/
+_instructor/
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# VS Code
+.vscode/
