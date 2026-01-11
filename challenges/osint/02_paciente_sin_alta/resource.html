@@ -6,6 +6,125 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Paciente sin alta · Hospital Saint Anima</title>
   <link rel="stylesheet" href="../../../templates/style.css">
+  <style>
+    .file-explorer {
+      background: #f8f9fa;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .file-item {
+      padding: 12px 16px;
+      margin: 8px 0;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .file-item:hover {
+      background: #f0f9ff;
+      border-color: #0b6fa4;
+      transform: translateX(4px);
+    }
+    .file-icon {
+      font-size: 24px;
+    }
+    .file-info {
+      flex: 1;
+    }
+    .file-name {
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 4px;
+    }
+    .file-meta {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    .document-viewer {
+      display: none;
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .document-viewer.active {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .doc-header {
+      border-bottom: 2px solid #0b6fa4;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .doc-title {
+      color: #1e3a8a;
+      font-size: 1.2rem;
+      margin: 0 0 8px 0;
+    }
+    .doc-meta {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .doc-content {
+      line-height: 1.8;
+      color: #1f2937;
+    }
+    .close-doc {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .close-doc:hover {
+      background: #4b5563;
+    }
+    .medical-data {
+      background: #f8f9fa;
+      padding: 12px;
+      border-left: 4px solid #0b6fa4;
+      margin: 16px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    .alert-section {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+      padding: 16px;
+      margin: 16px 0;
+      border-radius: 4px;
+    }
+    .coded-text {
+      background: #1f2937;
+      color: #10b981;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      margin: 12px 0;
+      word-break: break-all;
+    }
+  </style>
 </head>
 
 <body>
@@ -25,35 +144,223 @@
       <div class="meta"><a class="back" href="../../../intro.html" target="_self">⟵ Volver a Inicio</a></div>
     </div>
 
-
     <div class="notice">
-      <strong>Contexto:</strong> Tras recuperar el expediente borrado, se revisa un extracto administrativo que menciona una transferencia no registrada.
+      <strong>Contexto:</strong> Tras descubrir la conexión entre Nightingale Research Institute y el Hospital Saint Anima, has conseguido acceso al sistema de archivos médicos. Necesitas investigar al paciente SA-0404-999 y descubrir su conexión con el Proyecto ANIMA.
       <br>
-      <strong>Objetivo:</strong> Correlacionar el extracto con la fuga del paciente sin alta.
+      <strong>Objetivo:</strong> Revisa todos los documentos del expediente, correlaciona la información y encuentra la referencia al proyecto.
       <br>
       <details class="hint">
-        <summary>Pista</summary>
-        <div class="hint-body">El bloque final está en Base64; al decodificarlo se revela la referencia clave.</div>
+        <summary>Pista 1</summary>
+        <div class="hint-body">Lee todos los documentos. Presta atención a las notas del personal médico y los códigos de transferencia.</div>
+      </details>
+      <details class="hint">
+        <summary>Pista 2</summary>
+        <div class="hint-body">Las notas de enfermería mencionan un código de proyecto. Los informes de neurología tienen datos codificados. Combina la información.</div>
+      </details>
+      <details class="hint">
+        <summary>Pista 3</summary>
+        <div class="hint-body">La secuencia Base64 en el informe de neurología contiene información clave. Decodifícala y busca la referencia al proyecto.</div>
       </details>
     </div>
 
-    <div class="section">
-      <h2>Informe administrativo - expediente parcial</h2>
-      <p><strong>Extracto:</strong></p>
-      <pre class="code">expediente: SA-0404-105
-fecha: 2025-07-30
-nota: "transferido a planta inexistente"
-firma de operación: UGFjaWVudGUgc2VsZWNjaW9uYWRvIHBhcmEgcHJveWVjdG8gIkFuaW1hIi4gSUQgZGUgdHJhbnNmZXJlbmNpYTogRkxBR3tBTklNQX0
-</pre>
-      <section style="margin-top:14px">
-        <h3>Observaciones adicionales</h3>
-        <p>Parece que alguien se ha dejado iniciada la sesión en SocialMed (red social corporativa)</p>
-        <!-- Para los jugadores: el bloque adjunto está codificado en Base64; decodifícalo para revelar la pista. -->
-      </section>
+    <section class="section">
+      <h2>📁 Sistema de Archivos Médicos — Paciente SA-0404-999</h2>
+      <p style="color: #6b7280; margin-bottom: 16px;">Acceso concedido. Selecciona un documento para ver su contenido.</p>
 
+      <div class="file-explorer">
+        <ul class="file-list">
+          <li class="file-item" onclick="openDocument('ingreso')">
+            <span class="file-icon">📄</span>
+            <div class="file-info">
+              <div class="file-name">Informe de Ingreso</div>
+              <div class="file-meta">SA-0404-999_ingreso.pdf | 2025-10-08 | Dr. Rafael Mora</div>
+            </div>
+          </li>
+          <li class="file-item" onclick="openDocument('historial')">
+            <span class="file-icon">📋</span>
+            <div class="file-info">
+              <div class="file-name">Historial Clínico</div>
+              <div class="file-meta">SA-0404-999_historial.pdf | 2025-10-08 | Dra. Elena Vega</div>
+            </div>
+          </li>
+          <li class="file-item" onclick="openDocument('neurologia')">
+            <span class="file-icon">🧠</span>
+            <div class="file-info">
+              <div class="file-name">Evaluación Neurológica</div>
+              <div class="file-meta">SA-0404-999_neuro.pdf | 2025-10-09 | Dr. Santiago Torres</div>
+            </div>
+          </li>
+          <li class="file-item" onclick="openDocument('enfermeria')">
+            <span class="file-icon">💉</span>
+            <div class="file-info">
+              <div class="file-name">Notas de Enfermería</div>
+              <div class="file-meta">SA-0404-999_enfermeria.txt | 2025-10-09 | Enfermera Carla Moreno</div>
+            </div>
+          </li>
+          <li class="file-item" onclick="openDocument('transferencia')">
+            <span class="file-icon">🔐</span>
+            <div class="file-info">
+              <div class="file-name">Orden de Transferencia [CONFIDENCIAL]</div>
+              <div class="file-meta">SA-0404-999_transfer.enc | 2025-10-10 | Sistema Automatizado</div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
-    </div>
+      <!-- Document viewers -->
+      
+      <div id="doc-ingreso" class="document-viewer">
+        <div class="doc-header">
+          <h3 class="doc-title">📄 Informe de Ingreso</h3>
+          <p class="doc-meta">Paciente: SA-0404-999 | Fecha: 08-10-2025 | Médico: Dr. Rafael Mora</p>
+        </div>
+        <div class="doc-content">
+          <p><strong>Motivo de ingreso:</strong> Cefalea persistente, episodios de confusión, desorientación temporal.</p>
+          <p><strong>Antecedentes:</strong> Sin patologías previas relevantes. Paciente refiere estrés laboral reciente.</p>
+          
+          <div class="medical-data">
+            <strong>Constantes vitales:</strong><br>
+            TA: 138/85 mmHg | FC: 78 lpm | Temp: 36.8°C<br>
+            Saturación O2: 98% | Glucemia: 92 mg/dL
+          </div>
+          
+          <p><strong>Exploración inicial:</strong> Paciente consciente y orientado. Leve palidez cutánea. No signos de focalidad neurológica evidente. Se solicita TAC craneal y analítica completa.</p>
+          
+          <p><strong>Impresión diagnóstica:</strong> Síndrome confusional de origen por determinar. Ingreso en Planta 4 para observación y estudios complementarios.</p>
+          
+          <p><strong>Firma:</strong> Dr. Rafael Mora Jiménez | MIR Medicina Interna</p>
+        </div>
+        <button class="close-doc" onclick="closeDocument()">✕ Cerrar documento</button>
+      </div>
 
+      <div id="doc-historial" class="document-viewer">
+        <div class="doc-header">
+          <h3 class="doc-title">📋 Historial Clínico</h3>
+          <p class="doc-meta">Paciente: SA-0404-999 | Fecha: 08-10-2025 | Médico: Dra. Elena Vega</p>
+        </div>
+        <div class="doc-content">
+          <p><strong>Revisión de sistemas:</strong> El paciente presenta evolución favorable. Los episodios de confusión han disminuido. TAC craneal sin hallazgos significativos.</p>
+          
+          <div class="medical-data">
+            <strong>Analítica sanguínea:</strong><br>
+            Hemograma: Normal | Bioquímica: Normal<br>
+            Función renal: Normal | Función hepática: Normal<br>
+            <span style="color: #0b6fa4;">Nota: Marcadores neurológicos solicitados - Ref: NRI-2025-447</span>
+          </div>
+          
+          <p><strong>Comentarios:</strong> Se observa mejoría clínica. El paciente solicita alta voluntaria pero se recomienda completar estudios neurológicos especializados por el perfil sintomático.</p>
+          
+          <p><strong>Plan:</strong> Evaluación por Neurología. Continuar observación 48h adicionales.</p>
+          
+          <p><strong>Firma:</strong> Dra. Elena Vega Sanz | Adjunta Medicina Interna</p>
+        </div>
+        <button class="close-doc" onclick="closeDocument()">✕ Cerrar documento</button>
+      </div>
+
+      <div id="doc-neurologia" class="document-viewer">
+        <div class="doc-header">
+          <h3 class="doc-title">🧠 Evaluación Neurológica</h3>
+          <p class="doc-meta">Paciente: SA-0404-999 | Fecha: 09-10-2025 | Médico: Dr. Santiago Torres</p>
+        </div>
+        <div class="doc-content">
+          <p><strong>Motivo de consulta:</strong> Valoración de síndrome confusional y cefalea persistente.</p>
+          
+          <p><strong>Exploración neurológica:</strong> Pares craneales normales. Fuerza y sensibilidad conservadas. Reflejos osteotendinosos simétricos. No signos meníngeos. Coordinación y marcha normales.</p>
+          
+          <div class="medical-data">
+            <strong>Pruebas complementarias:</strong><br>
+            TAC craneal: Sin lesiones estructurales<br>
+            EEG: Actividad cerebral normal<br>
+            Resonancia magnética: Pendiente<br>
+            <span style="color: #0b6fa4;">Perfil neuropsicológico: Alteraciones leves en memoria a corto plazo</span>
+          </div>
+          
+          <div class="alert-section">
+            <strong>⚠️ DATOS CODIFICADOS DE TRANSFERENCIA</strong><br>
+            <span style="font-size: 0.85rem;">El siguiente bloque contiene información sensible sobre el protocolo de evaluación aplicado. Acceso restringido a personal autorizado del proyecto de investigación colaborativa.</span>
+            
+            <div class="coded-text">
+UGFjaWVudGUgY2FuZGlkYXRvIHBhcmEgcHJvdG9jb2xvIGRlIGludmVzdGlnYWNpw7NuIG5ldXJvY29nbml0aXZhLiBFdmFsdWFjacOzbiBjb21wbGV0YWRhIGNvbiDDqXhpdG8uIFBlcmZpbCBjb2luY2lkZW50ZSBjb24gY3JpdGVyaW9zIGRlIHNlbGVjY2nDs24gZGVsIHByb3llY3RvICJBTklNQSIuIENvbnNlbnRpbWllbnRvIGluZm9ybWFkbyBmaXJtYWRvLiBUcmFuc2ZlcmVuY2lhIGF1dG9yaXphZGEgYSB1bmlkYWQgZXNwZWNpYWxpemFkYS4gSUQgZGUgdHJhbnNmZXJlbmNpYTogRkxBR3tBTklNQX0=
+            </div>
+          </div>
+          
+          <p><strong>Conclusión:</strong> Paciente estable con sintomatología leve. Apto para protocolo de investigación según criterios de selección. Se procede a coordinación con unidad especializada.</p>
+          
+          <p><strong>Firma:</strong> Dr. Santiago Torres Blanco | Neurología</p>
+        </div>
+        <button class="close-doc" onclick="closeDocument()">✕ Cerrar documento</button>
+      </div>
+
+      <div id="doc-enfermeria" class="document-viewer">
+        <div class="doc-header">
+          <h3 class="doc-title">💉 Notas de Enfermería</h3>
+          <p class="doc-meta">Paciente: SA-0404-999 | Fecha: 09-10-2025 | Enfermera: Carla Moreno</p>
+        </div>
+        <div class="doc-content">
+          <p><strong>Turno de noche - 22:00 a 06:00</strong></p>
+          
+          <p><strong>23:15h</strong> — Paciente tranquilo, constantes estables. Solicita información sobre el "proyecto de investigación" mencionado por neurología. Se le informa que el Dr. Torres le dará más detalles por la mañana.</p>
+          
+          <p><strong>01:30h</strong> — Ronda nocturna. Paciente dormido. TA: 132/80, FC: 72 lpm. Sin incidencias.</p>
+          
+          <p><strong>03:45h</strong> — Paciente despierto, refiere insomnio. Se administra medicación prescrita. Comenta estar "nervioso por la transferencia". Se le tranquiliza.</p>
+          
+          <div class="medical-data">
+            <strong>Observaciones especiales:</strong><br>
+            El paciente ha firmado documentación adicional durante la tarde.<br>
+            Coordinación con Unidad de Investigación completada.<br>
+            <span style="color: #0b6fa4;">Código de proyecto asignado: ANIMA-2025-447</span><br>
+            Transferencia programada para 22-10-2025 a las 08:00h.
+          </div>
+          
+          <p><strong>05:00h</strong> — Paciente dormido. Última ronda sin novedades. Se deja registro actualizado para turno entrante.</p>
+          
+          <p><strong>Firma:</strong> Carla Moreno López | DUE Planta 4</p>
+        </div>
+        <button class="close-doc" onclick="closeDocument()">✕ Cerrar documento</button>
+      </div>
+
+      <div id="doc-transferencia" class="document-viewer">
+        <div class="doc-header">
+          <h3 class="doc-title">🔐 Orden de Transferencia [CONFIDENCIAL]</h3>
+          <p class="doc-meta">Paciente: SA-0404-999 | Fecha: 10-10-2025 | Sistema: Automatizado</p>
+        </div>
+        <div class="doc-content">
+          <div class="alert-section">
+            <strong>DOCUMENTO RESTRINGIDO - NIVEL 3</strong><br>
+            Este documento es confidencial y está protegido bajo acuerdo de colaboración institucional.
+          </div>
+          
+          <p><strong>Tipo de transferencia:</strong> Protocolo de Investigación Clínica</p>
+          <p><strong>Proyecto:</strong> Neurocognitive Enhancement Research - Fase II</p>
+          <p><strong>Institución colaboradora:</strong> Nightingale Research Institute (Hinxton, UK)</p>
+          
+          <div class="medical-data">
+            <strong>Detalles de transferencia:</strong><br>
+            Paciente ID: SA-0404-999<br>
+            Código de proyecto: ANIMA-2025-447<br>
+            Fecha programada: 10-10-2025 08:00h<br>
+            Destino: Sala 203 - Unidad de Investigación Clínica<br>
+            Responsable: Dr. Alejandro Navarro<br>
+            Estado: <span style="color: #dc2626;">TRANSFERIDO - REGISTRO PENDIENTE</span>
+          </div>
+          
+          <p><strong>Notas del sistema:</strong></p>
+          <ul>
+            <li>Consentimiento informado verificado ✓</li>
+            <li>Evaluación neurológica completada ✓</li>
+            <li>Criterios de selección cumplidos ✓</li>
+            <li>Registro en sistema central: <span style="color: #dc2626;">ERROR - Sala 203 no registrada en sistema de altas</span></li>
+          </ul>
+          
+          <p style="color: #6b7280; font-style: italic; margin-top: 20px;">
+            El paciente no aparece en el sistema de altas. La Sala 203 está clasificada como área de investigación restringida. Última ubicación registrada: desconocida.
+          </p>
+        </div>
+        <button class="close-doc" onclick="closeDocument()">✕ Cerrar documento</button>
+      </div>
+
+    </section>
 
     <footer style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
       <p>Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
@@ -78,6 +385,29 @@ firma de operación: UGFjaWVudGUgc2VsZWNjaW9uYWRvIHBhcmEgcHJveWVjdG8gIkFuaW1hIi4
 
   <script src="../../../templates/ctf-config.js"></script>
   <script>
+    // Document viewer functionality
+    function openDocument(docId) {
+      // Close all documents
+      const allDocs = document.querySelectorAll('.document-viewer');
+      allDocs.forEach(doc => doc.classList.remove('active'));
+      
+      // Open selected document
+      const selectedDoc = document.getElementById('doc-' + docId);
+      if (selectedDoc) {
+        selectedDoc.classList.add('active');
+        selectedDoc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    
+    function closeDocument() {
+      const allDocs = document.querySelectorAll('.document-viewer');
+      allDocs.forEach(doc => doc.classList.remove('active'));
+      
+      // Scroll back to file explorer
+      document.querySelector('.file-explorer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Gate functionality
     (function () {
       const CHALLENGE_ID = 'osint:02';
       const gate = document.getElementById('gate');

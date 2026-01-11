@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Projects - Nightingale Research Institute</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 2rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .tagline { font-size: 1.1rem; opacity: 0.9; }
+    nav {
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+    nav a {
+      color: #1e3a8a;
+      text-decoration: none;
+      padding: 0.5rem 1.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    nav a:hover, nav a.active {
+      background: #eff6ff;
+      border-radius: 6px;
+    }
+    main {
+      background: white;
+      margin: 2rem auto;
+      padding: 3rem;
+      max-width: 1200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .project {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+    }
+    .project:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+    }
+    .project h2 {
+      color: #1e3a8a;
+      margin-bottom: 1rem;
+    }
+    .project-meta {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+    .badge {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .confidential {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
+      background: white;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Nightingale Research Institute</h1>
+      <p class="tagline">Advancing Neuroscience Through Innovation</p>
+    </div>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="research.html" class="active">Research</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1 style="color: #1e3a8a; margin-bottom: 2rem;">Active Research Projects</h1>
+
+    <div class="project">
+      <span class="badge">ACTIVE</span>
+      <h2>Project ANIMA - Neural Interface Research</h2>
+      <div class="project-meta">
+        <span><strong>Principal Investigator:</strong> Dr. Eleanor Hayes</span>
+        <span><strong>Started:</strong> January 2024</span>
+        <span><strong>Funding:</strong> European Research Council</span>
+      </div>
+      <p>
+        Project ANIMA focuses on developing next-generation neural interface technology capable of bidirectional communication with the human nervous system. Our research aims to create seamless brain-computer interfaces that can assist patients with neurological conditions while advancing our understanding of neural plasticity.
+      </p>
+      <p style="margin-top: 1rem;">
+        <strong>Key Objectives:</strong>
+      </p>
+      <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+        <li>Development of biocompatible neural electrodes</li>
+        <li>Signal processing algorithms for real-time neural decoding</li>
+        <li>Clinical trials in collaboration with partner hospitals</li>
+        <li>Ethical framework for human enhancement technologies</li>
+      </ul>
+
+      <div class="confidential">
+        <p style="margin: 0;"><strong>⚠️ Partner Institutions:</strong></p>
+        <p style="margin-top: 0.5rem;">We collaborate with several European medical centers for clinical data collection and validation. Recent data transfers have been conducted with partner facility SA-XXXX in Madrid, Spain for patient screening and protocol validation.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: #6b7280;">
+          Data transfer logged: October 2025 | Protocol compliance verified | Ethics board approval pending
+        </p>
+        <p style="margin-top: 1rem;">
+          <a href="collaboration_report.html" target="_blank" style="color: #dc2626; font-weight: 600; text-decoration: underline;">📄 View Full Partnership Report (Confidential)</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="project">
+      <span class="badge">PHASE III</span>
+      <h2>Cognitive Enhancement Study</h2>
+      <div class="project-meta">
+        <span><strong>Principal Investigator:</strong> Dr. James Crawford</span>
+        <span><strong>Started:</strong> March 2023</span>
+        <span><strong>Funding:</strong> Private Donors</span>
+      </div>
+      <p>
+        This longitudinal study investigates non-invasive methods for cognitive enhancement in healthy adults. Using transcranial magnetic stimulation (TMS) and neuroplasticity training protocols, we aim to improve memory, attention, and executive function.
+      </p>
+      <p style="margin-top: 1rem;">
+        <strong>Key Objectives:</strong>
+      </p>
+      <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+        <li>Optimize TMS protocols for specific cognitive domains</li>
+        <li>Investigate long-term effects of repeated stimulation</li>
+        <li>Develop personalized treatment plans based on neuroimaging</li>
+        <li>Assess safety and efficacy across diverse populations</li>
+      </ul>
+      <p style="margin-top: 1rem;">
+        <strong>Current Status:</strong> We have enrolled 120 participants and completed 18 months of follow-up assessments. Preliminary results show significant improvements in working memory tasks (p < 0.01) with minimal adverse effects. Data analysis for publication is ongoing.
+      </p>
+    </div>
+
+    <div class="project">
+      <span class="badge">COMPLETED</span>
+      <h2>Neural Mapping Initiative</h2>
+      <div class="project-meta">
+        <span><strong>Principal Investigator:</strong> Dr. Sarah Chen</span>
+        <span><strong>Completed:</strong> December 2024</span>
+        <span><strong>Funding:</strong> National Science Foundation</span>
+      </div>
+      <p>
+        Comprehensive mapping of neural pathways in the human brain using advanced fMRI and diffusion tensor imaging techniques. This three-year project successfully created high-resolution connectivity maps for over 200 participants, contributing to our understanding of individual brain architecture variability.
+      </p>
+      <p style="margin-top: 1rem;">
+        <strong>Key Achievements:</strong>
+      </p>
+      <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+        <li>Developed novel tractography algorithms for improved accuracy</li>
+        <li>Created open-access database of anonymized brain connectivity data</li>
+        <li>Published 8 peer-reviewed papers in high-impact journals</li>
+        <li>Trained 12 doctoral students in advanced neuroimaging techniques</li>
+      </ul>
+      <p style="margin-top: 1rem;">
+        <strong>Publications:</strong> Results have been published in <em>Nature Neuroscience</em>, <em>Brain</em>, and <em>NeuroImage</em>. The complete dataset is available through the Human Connectome Project repository.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>Nightingale Research Institute | Est. 2018 | Hinxton, United Kingdom</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">IP: 193.62.193.83 | contact@nightingale-research.org</p>
+  </footer>
+</body>
+</html>

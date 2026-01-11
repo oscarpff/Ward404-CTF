@@ -28,7 +28,7 @@
     <div style="display:flex;align-items:center;justify-content:center;flex-direction:column">
       <div class="brand" aria-hidden="true">Ward 404</div>
       <div class="subtitle">CTF · Simulated hospital investigation</div>
-      <a class="play-btn animated" href="intro.html" id="cta-play" title="Play Ward 404 CTF">
+      <a class="play-btn animated" href="#" id="cta-play" title="Play Ward 404 CTF">
         
         <span>PLAY</span>
       </a>
@@ -39,16 +39,188 @@
     </div>
   </div>
   <img class="watermark" src="assets/logo_saint_anima.png" alt="Saint Anima watermark" aria-hidden="true">
+  
+  <!-- Modal overlay -->
+  <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9998; backdrop-filter: blur(4px);"></div>
+  
+  <!-- Envelope modal -->
+  <div id="envelope-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: #f8f9fa; padding: 30px; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+    <div id="envelope-container" style="text-align: center; cursor: pointer;">
+      <div style="margin-bottom: 16px;">
+        <h2 style="color: #1e3a8a; margin-bottom: 6px; font-size: 1.3rem;">📬 Mensaje Clasificado</h2>
+        <p style="color: #6b7280; margin: 0; font-size: 0.85rem;">De: Marcus Reeves, Europol Cybercrime Division</p>
+        <p style="color: #dc2626; font-weight: 600; margin-top: 6px; font-size: 0.8rem;">⚠️ MÁXIMA PRIORIDAD — CONFIDENCIAL</p>
+      </div>
+      
+      <div id="envelope" style="position: relative; width: 200px; margin: 20px auto; transition: transform 0.4s ease, opacity 0.4s ease; will-change: transform, opacity;">
+        <div style="width: 200px; height: 120px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border-radius: 6px; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.3);">
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #fbbf24; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 3px 8px rgba(0,0,0,0.3);">🔒</div>
+          <div style="position: absolute; top: 8px; left: 8px; right: 8px; height: 20px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.1) 8px, rgba(0,0,0,0.1) 16px); border-radius: 3px;"></div>
+          <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; height: 20px; background: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.1) 8px, rgba(0,0,0,0.1) 16px); border-radius: 3px;"></div>
+        </div>
+        <div id="envelope-flap" style="position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-top: 60px solid #b91c1c; transform-origin: top center; transition: transform 0.5s ease; will-change: transform; z-index: 10;"></div>
+      </div>
+      
+      <p style="color: #1e3a8a; font-weight: 600; margin-top: 16px; font-size: 0.9rem; animation: pulse 2s infinite;">👆 Haz clic para abrir el sobre</p>
+    </div>
+
+    <div id="letter-content" style="display: none; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; will-change: opacity, transform;">
+      <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); border: 1px solid #e5e7eb; max-width: 700px; margin: 0 auto;">
+        <div style="border-bottom: 2px solid #1e3a8a; padding-bottom: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 10px;">🛡️</div>
+              <h3 style="margin: 0; color: #1e3a8a; font-size: 1rem;">Marcus Reeves</h3>
+              <p style="margin: 3px 0 0 0; color: #6b7280; font-size: 0.85rem;">Special Agent</p>
+              <p style="margin: 0; color: #6b7280; font-size: 0.8rem;">Europol Cybercrime Division</p>
+            </div>
+            <div style="text-align: right;">
+              <div style="background: #dc2626; color: white; padding: 5px 10px; border-radius: 5px; font-weight: 600; font-size: 0.8rem; margin-bottom: 6px;">CONFIDENCIAL</div>
+              <p style="margin: 0; color: #6b7280; font-size: 0.8rem;">11 de enero de 2026</p>
+              <p style="margin: 0; color: #6b7280; font-size: 0.8rem;">03:47 CET</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="line-height: 1.7; color: #1f2937; font-size: 0.95rem;">
+          <p style="margin-top: 0;"><strong>Equipo de Investigación Digital,</strong></p>
+          <p>Necesito vuestra ayuda inmediata. Durante los últimos tres meses, hemos estado monitorizando comunicaciones sospechosas relacionadas con el <strong style="color: #dc2626;">Hospital Saint Anima</strong> en Madrid, España. Lo que comenzó como una investigación rutinaria de blanqueo de capitales ha revelado algo mucho más preocupante.</p>
+          <p>Hace 48 horas, nuestros sistemas de interceptación captaron una comunicación cifrada que menciona <strong>coordenadas GPS en Reino Unido</strong> (zona de Hinxton, Cambridgeshire) y referencias explícitas a "transferencias de datos médicos" hacia instalaciones españolas. La comunicación habla de un "Spanish partner" y menciona el código de facilidad <strong>"SA-XXXX"</strong>.</p>
+          <p><strong>Lo más alarmante:</strong> Detectamos borrado masivo de registros médicos en el Hospital Saint Anima durante la misma ventana temporal. Alguien está intentando eliminar evidencias.</p>
+          <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 14px; margin: 18px 0; border-radius: 4px;">
+            <p style="margin: 0; color: #991b1b; font-weight: 600; font-size: 0.9rem;">⚠️ SITUACIÓN CRÍTICA: Tenemos menos de 72 horas antes de que los sistemas de respaldo sean sobrescritos permanentemente. Una vez que eso ocurra, la evidencia desaparecerá para siempre.</p>
+          </div>
+          <p><strong>Vuestra misión:</strong></p>
+          <ol style="margin-left: 24px; padding-left: 0;">
+            <li style="margin-bottom: 6px;"><strong>OSINT:</strong> Investigad las coordenadas interceptadas. Identificad qué institución en Reino Unido está enviando datos al hospital español.</li>
+            <li style="margin-bottom: 6px;"><strong>SOCMINT:</strong> Analizad las redes sociales del personal hospitalario. Buscad conversaciones comprometedoras, fotos con metadatos, cualquier indicio.</li>
+            <li style="margin-bottom: 6px;"><strong>CTI:</strong> Examinad los logs de red y transferencias de archivos. Reconstruid la cadena de evidencia digital.</li>
+            <li style="margin-bottom: 6px;"><strong>Infiltración:</strong> Una vez tengáis suficiente información, necesitaréis acceder a los sistemas internos del hospital para recuperar los registros borrados.</li>
+          </ol>
+          <p>No sabemos exactamente qué están ocultando, pero las piezas apuntan a <strong>experimentación médica no autorizada</strong>, posible tráfico de datos de pacientes, y una red internacional de colaboración ilícita entre instituciones científicas.</p>
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+            <p style="margin-bottom: 6px;">Confío en vuestras habilidades. Los retos están organizados por disciplina, pero todos están conectados. Cada flag que recuperéis es una pieza del rompecabezas.</p>
+            <p style="margin-bottom: 0; font-weight: 600; color: #dc2626;">El reloj está corriendo.</p>
+          </div>
+          <div style="margin-top: 30px; text-align: right;">
+            <p style="margin: 0; font-family: 'Brush Script MT', cursive; font-size: 1.6rem; color: #1e3a8a;">Marcus Reeves</p>
+            <div style="width: 100px; height: 2px; background: #1e3a8a; margin: 6px 0 0 auto;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 24px;">
+        <button onclick="closeLetterToCorner()" style="padding: 9px 18px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; margin-right: 8px;">📥 Guardar carta</button>
+        <button onclick="proceedToIntro()" style="padding: 9px 18px; background: #0b6fa4; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; font-weight: 600;">Comenzar Investigación →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimized envelope corner -->
+  <div id="envelope-minimized" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 9997; cursor: pointer; transition: all 0.3s ease;" onclick="reopenEnvelope()">
+    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border: 3px solid #fbbf24; position: relative;">
+      <span style="font-size: 32px;">📬</span>
+      <div style="position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; border: 2px solid white; animation: pulse 2s infinite;">!</div>
+    </div>
+    <p style="margin: 8px 0 0 0; text-align: center; color: #1e3a8a; font-size: 0.75rem; font-weight: 600;">Mensaje</p>
+  </div>
+
+  <style>
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    #envelope-minimized:hover { transform: scale(1.1); }
+    #modal-overlay { transition: opacity 0.2s ease; }
+    #envelope-modal { transition: opacity 0.2s ease; }
+  </style>
+
   <script>
-    // small keyboard accessibility: Enter or Space on focused button goes to intro
-    document.getElementById('cta-play').addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){ e.currentTarget.click(); }
+    // Open modal when clicking Play
+    document.getElementById('cta-play').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('modal-overlay').style.display = 'block';
+      document.getElementById('envelope-modal').style.display = 'block';
     });
-    // subtle entrance animation on load
-    window.addEventListener('load', function(){
-      const btn = document.getElementById('cta-play');
-      setTimeout(()=> btn.classList.add('glow'), 400);
+
+    // Open envelope animation (optimized)
+    document.getElementById('envelope-container').addEventListener('click', function() {
+      const flap = document.getElementById('envelope-flap');
+      const envelope = document.getElementById('envelope');
+      const envelopeContainer = document.getElementById('envelope-container');
+      const letterContent = document.getElementById('letter-content');
+      
+      // Trigger animations
+      flap.style.transform = 'rotateX(180deg)';
+      
+      setTimeout(() => {
+        envelope.style.transform = 'scale(0.7)';
+        envelope.style.opacity = '0';
+      }, 300);
+      
+      setTimeout(() => {
+        envelopeContainer.style.display = 'none';
+        letterContent.style.display = 'block';
+        requestAnimationFrame(() => {
+          letterContent.style.opacity = '1';
+          letterContent.style.transform = 'translateY(0)';
+        });
+      }, 650);
     });
+
+    // Close letter and minimize to corner (optimized)
+    function closeLetterToCorner() {
+      const modal = document.getElementById('envelope-modal');
+      const overlay = document.getElementById('modal-overlay');
+      const minimized = document.getElementById('envelope-minimized');
+      const letterContent = document.getElementById('letter-content');
+      
+      letterContent.style.opacity = '0';
+      letterContent.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        modal.style.opacity = '0';
+        overlay.style.opacity = '0';
+        
+        setTimeout(() => {
+          modal.style.display = 'none';
+          overlay.style.display = 'none';
+          modal.style.opacity = '1';
+          overlay.style.opacity = '1';
+          minimized.style.display = 'block';
+          resetEnvelope();
+        }, 200);
+      }, 400);
+    }
+
+    // Reopen envelope from corner
+    function reopenEnvelope() {
+      document.getElementById('envelope-minimized').style.display = 'none';
+      document.getElementById('modal-overlay').style.display = 'block';
+      document.getElementById('envelope-modal').style.display = 'block';
+    }
+
+    // Reset envelope to initial state
+    function resetEnvelope() {
+      const flap = document.getElementById('envelope-flap');
+      const envelope = document.getElementById('envelope');
+      const envelopeContainer = document.getElementById('envelope-container');
+      const letterContent = document.getElementById('letter-content');
+      
+      letterContent.style.display = 'none';
+      letterContent.style.opacity = '0';
+      letterContent.style.transform = 'translateY(20px)';
+      
+      envelopeContainer.style.display = 'block';
+      envelope.style.transform = 'scale(1)';
+      envelope.style.opacity = '1';
+      flap.style.transform = 'rotateX(0deg)';
+    }
+
+    // Proceed to intro page
+    function proceedToIntro() {
+      window.location.href = 'intro.html';
+    }
+
+    // Close modal if clicking overlay
+    document.getElementById('modal-overlay').addEventListener('click', closeLetterToCorner);
   </script>
 </body>
 </html>

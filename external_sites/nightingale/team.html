@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Team - Nightingale Research Institute</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 2rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .tagline { font-size: 1.1rem; opacity: 0.9; }
+    nav {
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+    nav a {
+      color: #1e3a8a;
+      text-decoration: none;
+      padding: 0.5rem 1.5rem;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    nav a:hover, nav a.active {
+      background: #eff6ff;
+      border-radius: 6px;
+    }
+    main {
+      background: white;
+      margin: 2rem auto;
+      padding: 3rem;
+      max-width: 1200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .member {
+      background: #f9fafb;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .member:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+    }
+    .member-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      font-weight: bold;
+    }
+    .member h3 {
+      color: #1e3a8a;
+      margin-bottom: 0.5rem;
+    }
+    .member-title {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .member-bio {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #6b7280;
+      background: white;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Nightingale Research Institute</h1>
+      <p class="tagline">Advancing Neuroscience Through Innovation</p>
+    </div>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="team.html" class="active">Team</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1 style="color: #1e3a8a; margin-bottom: 1rem;">Our Research Team</h1>
+    <p style="font-size: 1.1rem; color: #6b7280; margin-bottom: 2rem;">
+      Our multidisciplinary team brings together experts from neuroscience, engineering, medicine, and ethics to push the boundaries of neural interface research.
+    </p>
+
+    <div class="team-grid">
+      <div class="member">
+        <div class="member-photo">EH</div>
+        <h3>Dr. Eleanor Hayes</h3>
+        <div class="member-title">Director & Principal Investigator</div>
+        <p class="member-bio">
+          PhD in Neuroscience from Cambridge University. Over 15 years of experience in neural interface research. Leads Project ANIMA and oversees all research initiatives.
+        </p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">JC</div>
+        <h3>Dr. James Crawford</h3>
+        <div class="member-title">Senior Research Scientist</div>
+        <p class="member-bio">
+          Specialist in cognitive enhancement and neuroplasticity. Published over 50 papers in peer-reviewed journals. Leads the Cognitive Enhancement Study.
+        </p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">SC</div>
+        <h3>Dr. Sarah Chen</h3>
+        <div class="member-title">Lead Data Scientist</div>
+        <p class="member-bio">
+          Expert in computational neuroscience and machine learning. Develops advanced algorithms for neural signal processing and pattern recognition.
+        </p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">RM</div>
+        <h3>Dr. Rafael Mora</h3>
+        <div class="member-title">Clinical Research Coordinator</div>
+        <p class="member-bio">
+          Medical doctor specializing in neurology. Manages clinical trial partnerships with European medical centers. Oversees patient safety and ethical compliance.
+        </p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">AP</div>
+        <h3>Dr. Aisha Patel</h3>
+        <div class="member-title">Bioethics Advisor</div>
+        <p class="member-bio">
+          PhD in Medical Ethics. Ensures all research adheres to international ethical standards. Advises on informed consent and patient rights.
+        </p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">MK</div>
+        <h3>Dr. Marcus Klein</h3>
+        <div class="member-title">Engineering Lead</div>
+        <p class="member-bio">
+          Biomedical engineer with expertise in neural electrode design. Develops hardware for biocompatible neural interfaces and signal acquisition systems.
+        </p>
+      </div>
+    </div>
+
+    <section style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #e5e7eb;">
+      <h2 style="color: #1e3a8a; margin-bottom: 1rem;">Join Our Team</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8;">
+        We are always looking for talented researchers, engineers, and medical professionals to join our mission. If you're passionate about advancing neuroscience and developing ethical, cutting-edge technologies, we'd love to hear from you.
+      </p>
+      <p style="margin-top: 1rem;">
+        <a href="contact.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Contact us about career opportunities →</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Nightingale Research Institute | Est. 2018 | Hinxton, United Kingdom</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">IP: 193.62.193.83 | contact@nightingale-research.org</p>
+  </footer>
+</body>
+</html>

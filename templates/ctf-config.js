@@ -13,7 +13,7 @@
 
     // Keys used to protect certain resources (change values to update keys)
     KEYS: {
-      'osint:02': 'OSINT_RECOVERED',
+      'osint:02': 'ANIMA_RECOVERED',
       'socmint:03': 'SOCMINT_EVIDENCE',
       'socmint:04': 'SOCMINT_EVIDENCE',
       'cti:06': 'NETWORK_ANOMALY'

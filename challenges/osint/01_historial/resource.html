@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El historial borrado · Hospital Saint Anima</title>
+<title>Investigación del Laboratorio · Hospital Saint Anima</title>
 <link rel="stylesheet" href="../../../templates/style.css">
 </head>
 <body>
@@ -24,54 +24,55 @@
   </div>
   
   <div class="notice">
-    <strong>Contexto:</strong> Se audita el expediente inicial de SA-0404-999 justo después de su ingreso.
+    <strong>Contexto:</strong> Has interceptado una comunicación que menciona coordenadas GPS sospechosas en Reino Unido. Se requiere investigación de la zona.
     <br>
-    <strong>Objetivo:</strong> Recuperar la evidencia oculta en el expediente (comentarios, metadatos) para confirmar la manipulación del mismo.
+    <strong>Objetivo:</strong> Investigar las coordenadas proporcionadas, identificar las instituciones en el área y encontrar cualquier conexión con actividades sospechosas.
     <br>
     <details class="hint">
-      <summary>Pista</summary>
-      <div class="hint-body">El rastro persiste en el código fuente y los comentarios HTML; no está en el texto visible.</div>
+      <summary>Pista 1</summary>
+      <div class="hint-body">Usa el mapa interactivo para explorar la zona. Hay varios marcadores de instituciones científicas. Investiga cada una hasta encontrar actividad sospechosa.</div>
+    </details>
+    <details class="hint">
+      <summary>Pista 2</summary>
+      <div class="hint-body">Una de las instituciones muestra alertas de transferencias de datos a España. Revisa sus documentos de colaboración y busca información útil.</div>
     </details>
   </div>
 
   <section class="section">
     <div class="card">
-      <h2>Expediente clínico — Extracto SA-0404-999 (Borrado parcialmente)</h2>
+      <h2>Informe de Inteligencia — Interceptación de Comunicaciones</h2>
 
-      <!-- REDACTED DATA RECOVERED FROM AUDIT LOG:
-      PATIENT_NAME=Julio Sainz Morales
-      DOB=1988-05-14
-      ADMISSION_DATE=2025-10-10 11:24
-      ADMISSION_WARD=203 (Saint Anima Research Wing)
-      PRIMARY_PHYSICIAN=Dr. Rafael Mora (Head of Experimental Protocol)
-      DIAGNOSIS_INITIAL=Acute respiratory distress (cover diagnosis)
-      DIAGNOSIS_ACTUAL=Selected for Anima Protocol - neural interface tolerance testing
-      CONSENT_STATUS=Not properly documented - subject unaware
-      -->
+      <p><strong>Origen:</strong> Vigilancia de comunicaciones cifradas<br>
+      <strong>Fecha de interceptación:</strong> 2025-10-05<br>
+      <strong>Nivel de prioridad:</strong> ALTA</p>
 
-      <table class="record-table" style="width:100%;border-collapse:collapse;margin-top:8px">
-        <tr><th style="text-align:left;width:30%">Campo</th><th style="text-align:left">Valor</th></tr>
-        <tr><td>Nombre</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Julio Sainz Morales --></td></tr>
-        <tr><td>ID paciente</td><td>SA-0404-999</td></tr>
-        <tr><td>Fecha de nacimiento</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- 1988-05-14 --></td></tr>
-        <tr><td>Admisión</td><td>2025-10-10 — Sala 203<!-- 11:24 - Ala de investigación Saint Anima --></td></tr>
-        <tr><td>Médico responsable</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Dr. Rafael Mora --></td></tr>
-        <tr><td>Diagnósticos</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Protocolo Anima: pruebas de tolerancia de interfaz neural | FLAG{OSINT_RECOVERED} --></td></tr>
-        <tr><td>Antecedentes</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Historial clínico limpio, sin condiciones previas relevantes --></td></tr>
-        <tr><td>Medicaciones</td><td>[REDACTADO — EVIDENCIA BORRADA]<!-- Sedantes experimentales; protocolo no estándar --></td></tr>
-      </table>
+      <h3 style="margin-top:16px">Comunicación Interceptada</h3>
+      <div style="background:#f8f9fa;padding:12px;border-left:3px solid #dc2626;margin:12px 0;font-family:monospace;font-size:0.9rem">
+        <p style="margin:0;color:#dc2626"><strong>[ENCRYPTED CHANNEL #4782]</strong></p>
+        <p style="margin:8px 0 0 0">
+          "Transfer complete. Coordinates for next pickup:<br>
+          <strong style="color:#0b6fa4">52.0805, 0.1840</strong><br>
+          Facility operational. Medical data secured.<br>
+          Awaiting confirmation from Spanish partner."
+        </p>
+      </div>
 
-      <h3 style="margin-top:12px">Notas clínicas (parcialmente recuperadas)</h3>
-      <p><strong>2025-10-10 — [REDACTADO]</strong><br>[REDACTADO — EVIDENCIA BORRADA]<!-- Protocolo de consentimiento informado: NEGOCIADO (no oficial). Sujeto inducido mediante engaño sobre naturaleza de procedimiento. --> Protocolo de consentimiento informado: no disponible.</p>
-      <p><strong>2025-10-10 15:02 — Enfermería (turno B)</strong><br>Observado movimiento de datos desde dispositivo del paciente SA-0404-999 hacia infraestructura externa. Datos sensibles. Incidencia reportada a sistemas como #INC-224. 
-      <p><strong>ADVERTENCIA: Este registro fue destinado a eliminación pero persiste en los logs de auditoría.</strong></p><!-- Transferencia confirmada: registros biométricos, resonancia magnética funcional (fMRI) pre-protocolo, y historial de reacción a estimuli neuronales. Destino: 185.125.190.58:9443 (nodo de exfiltración conocido) --></p>
+      <h3 style="margin-top:16px">Análisis Preliminar</h3>
+      <p>Las coordenadas interceptadas apuntan a una zona en Hinxton, Cambridgeshire, Reino Unido. Esta área alberga varios centros de investigación científica y biomédica. Se requiere investigación detallada para identificar la instalación exacta y cualquier conexión con operaciones sospechosas.</p>
 
-      <!-- INTERNAL AUDIT FLAG: This record is linked to Anima Protocol security breach.
-      Investigation status: ACTIVE
-      Related incidents: #INC-224, #INC-225, #INC-226
-      Data exfiltration confirmed: 2025-10-10 01:52:03 UTC
-      Responsible party: Under investigation
-      -->
+      <h3 style="margin-top:16px">Coordenadas GPS</h3>
+      <div style="background:#fff;padding:12px;border:1px solid #ddd;border-radius:6px;margin:12px 0">
+        <p style="margin:0"><strong>Latitud:</strong> 52.0805° N</p>
+        <p style="margin:0"><strong>Longitud:</strong> 0.1840° E</p>
+        <p style="margin:8px 0 0 0;color:#6b7280">Zona: Hinxton, Cambridgeshire, Reino Unido</p>
+      </div>
+
+      <div style="background:#e3f2fd;padding:12px;border-radius:6px;margin:16px 0;border:1px solid #2196f3">
+        <p style="margin:0;color:#1565c0"><strong>🗺️ Herramienta de Investigación:</strong></p>
+        <p style="margin:8px 0 0 0;color:#1565c0">Utiliza nuestro sistema de mapeo para investigar las instituciones en estas coordenadas.</p>
+        <a href="../../../external_sites/nightingale/map.html" target="_blank" style="display:inline-block;margin-top:10px;padding:10px 16px;background:#2196f3;color:white;text-decoration:none;border-radius:6px;font-weight:600">🔍 Abrir Mapa de Investigación</a>
+      </div>
+
     </div>
   </section>
   <footer style="text-align:center;color:#666;font-size:0.9em;margin-top:60px;padding-top:30px;border-top:1px solid #333">
