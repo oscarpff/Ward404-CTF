@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CTF Summary — Hospital Saint Anima</title>
+  <title>CTF Summary — Ward404</title>
   <link rel="stylesheet" href="templates/style.css">
   <style>
     body{background:linear-gradient(180deg,var(--bg),#ffffff);color:#102029;font-family:var(--font);margin:0;}
@@ -34,122 +34,106 @@
     <div class="header">
       <img src="assets/logo_saint_anima.png" alt="Logo Saint Anima">
       <div>
-        <h1>Resumen · CTF Hospital Saint Anima</h1>
-        <div class="lead">Investigación completada — Experimento Anima expuesto</div>
+        <h1>Resumen · CTF Ward404</h1>
+        <div class="lead">Investigación completada — Proyecto ANIMA expuesto</div>
       </div>
       <div style="margin-left:auto;text-align:right;color:var(--muted);font-size:0.9rem">
-        Ref: HSA-CTF-2025<br>Unidad: Planta 4 · Medicina Interna
+        Ref: W404-CTF-2025<br>Hospital Clausurado
       </div>
     </div>
     <div class="completion-badge">✓ Completado</div>
 
     <div class="completion-stats">
       <div class="stat-card">
-        <div class="stat-value">7</div>
-        <div class="stat-label">Retos Completados (incluye Pentest)</div>
+        <div class="stat-value">6</div>
+        <div class="stat-label">Retos Completados</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">6</div>
         <div class="stat-label">FLAGS Obtenidas</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">SA-0404-999</div>
-        <div class="stat-label">Protagonista</div>
+        <div class="stat-value">Ward404</div>
+        <div class="stat-label">Proyecto ANIMA</div>
       </div>
     </div>
 
     <!-- RETO 01 -->
     <div class="reto">
-      <div class="reto-title">Reto 01 — Historial Médico OSINT</div>
+      <div class="reto-title">Reto 01 — Historial Médico (OSINT)</div>
       <div class="reto-description">
-        Investigación de historial médico del paciente SA-0404-999 en el sistema de registros del hospital. Acceso a datos sensibles y vinculación con el experimento Anima.
+        Investigación del historial médico del paciente en el sistema de registros del hospital. Primera evidencia del proyecto ANIMA y sus procedimientos experimentales.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">Paciente: SA-0404-999 | Hospital: Saint Anima | Diagnóstico vinculado a experimento</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">OSINT - Inteligencia de Fuentes Abiertas</div>
       <div class="label">FLAG:</div>
-      <div class="flag-box">FLAG{ANIMA_RECOVERED}</div>
+      <div class="flag-box">FLAG{OSINT_RECOVERED}</div>
     </div>
 
     <!-- RETO 02 -->
     <div class="reto">
-      <div class="reto-title">Reto 02 — SOCMINT: Paciente sin Alta</div>
+      <div class="reto-title">Reto 02 — Paciente sin Alta (OSINT)</div>
       <div class="reto-description">
-        Identificación de paciente SA-0404-999 y conexión con experimento Anima.
+        Investigación de registros de pacientes que no recibieron alta hospitalaria. Descubrimiento de la conexión directa con el proyecto ANIMA y sus participantes involuntarios.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">Datos vinculados a SA-0404-999 | Experimento Anima confirmado</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">OSINT - Análisis de Registros Hospitalarios</div>
       <div class="label">FLAG:</div>
       <div class="flag-box">FLAG{ANIMA}</div>
     </div>
 
     <!-- RETO 03 -->
     <div class="reto">
-      <div class="reto-title">Reto 03 — SOCMINT: Post de Enfermera</div>
+      <div class="reto-title">Reto 03 — Post de Enfermera (SOCMINT)</div>
       <div class="reto-description">
-        Análisis de contenido compartido por personal del hospital en redes sociales. Descubrimiento de evidencia de experimento no autorizado.
+        Análisis de redes sociales del personal hospitalario. Descubrimiento de fotografías y evidencia digital compartida por una enfermera del turno B que revela detalles del experimento.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">Post de Carla Moreno | Evidencia de procedimiento experimental | Víctima: SA-0404-999</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">SOCMINT - Inteligencia en Redes Sociales</div>
       <div class="label">FLAG:</div>
       <div class="flag-box">FLAG{SOCMINT_EVIDENCE}</div>
     </div>
 
     <!-- RETO 04 -->
     <div class="reto">
-      <div class="reto-title">Reto 04 — SOCMINT: Grupo Turno B</div>
+      <div class="reto-title">Reto 04 — Grupo Turno B (SOCMINT)</div>
       <div class="reto-description">
-        Investigación de comunicaciones internas del equipo médico en redes sociales. Revelación de alertas sobre procedimientos no autorizados en Hospital Saint Anima.
+        Infiltración en grupo privado de comunicación del personal del turno nocturno. Revelación de conversaciones sobre pacientes comprometidos y procedimientos experimentales no autorizados.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">Grupo privado | Comunicación interna del turno B | Alerta: procedimientos experimentales documentados</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">SOCMINT - Análisis de Comunicaciones Privadas</div>
       <div class="label">FLAG:</div>
       <div class="flag-box">FLAG{PATIENT_COMPROMISED}</div>
     </div>
 
     <!-- RETO 05 -->
     <div class="reto">
-      <div class="reto-title">Reto 05 — CTI: Análisis de Tráfico de Red</div>
+      <div class="reto-title">Reto 05 — Análisis de Tráfico de Red (CTI)</div>
       <div class="reto-description">
-        Análisis de logs de red y tráfico de datos del servidor de emergencia. Identificación de IP maliciosa y conexión comprometida (185.125.190.58:9443).
+        Análisis de logs de red del servidor hospitalario. Identificación de conexiones anómalas, IPs sospechosas y patrones de comunicación con destinos externos no autorizados.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">IP Maliciosa: 185.125.190.58 | Puerto: 9443 | Protocolo: TLS | Ubicación: Sofia, Bulgaria | ASN: AS8866 BulData</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">CTI - Cyber Threat Intelligence | Network Analysis</div>
       <div class="label">FLAG:</div>
       <div class="flag-box">FLAG{NETWORK_ANOMALY}</div>
     </div>
 
     <!-- RETO 06 -->
     <div class="reto">
-      <div class="reto-title">Reto 06 — CTI: Análisis Forense - Transferencia de Datos</div>
+      <div class="reto-title">Reto 06 — Análisis Forense de Transferencia (CTI)</div>
       <div class="reto-description">
-        Investigación forense de archivos exfiltrados del servidor hospitalario. Identificación del archivo comprometido y confirmación de robo de datos de paciente SA-0404-999.
+        Investigación forense de sistemas comprometidos. Análisis de archivos transferidos, confirmación de exfiltración de datos sensibles del proyecto ANIMA y evidencia de robo de información de pacientes.
       </div>
-      <div class="label">Respuesta:</div>
-      <div class="answer-box">Archivo Exfiltrado: patient_SA-0404-999_anima_study.csv | Tamaño: 2.4 MB | Hash SHA-256: a7f3e9c2... | Contenido: Datos médicos y experimentales</div>
+      <div class="label">Categoría:</div>
+      <div class="answer-box">CTI - Digital Forensics | Data Exfiltration Analysis</div>
       <div class="label">FLAG:</div>
       <div class="flag-box">FLAG{DATA_EXFILTRATED}</div>
     </div>
 
-    <!-- PENTEST FINAL -->
-    <div class="reto">
-      <div class="reto-title">Pentest Final — Escape y Escalación</div>
-      <div class="reto-description">
-        Acceso inicial anónimo a FTP, elevación de privilegios vía SSH, escalación a admin y apertura de puerta de emergencia. No entrega FLAG independiente; es la validación final del flujo.
-      </div>
-      <div class="label">Pasos Realizados:</div>
-      <div class="answer-box">
-        <p>1. FTP Anónimo → Descarga: backup_notes.txt, emergency_codes.txt</p>
-        <p></p>2. SSH: maintenance / HSA_2025_m! → Inspección de .bash_history</p>
-        <p>3. Descubrimiento: /opt/admin_tools/escalate.sh</p>
-        <p>4. Ejecución: run /opt/admin_tools/escalate.sh → Escalación a admin</p>
-        <p>5. Acceso a puerta: open_door 2810 (PIN correcto desde hospital Sala 203)</p>
-      </div>
-    </div>
-
     <div class="footer">
-      <p><strong>Experimento Anima Expuesto</strong></p>
-      <p>La verdad siempre encuentra un camino.</p>
-      <p style="margin-top: 20px; color: #555;">Hospital Saint Anima CTF — Óscar Pérez Fernández · 2025</p>
+      <p><strong>Proyecto ANIMA Expuesto</strong></p>
+      <p>Has descubierto la verdad detrás del Ward404. Todas las evidencias han sido recopiladas.</p>
+      <p style="margin-top: 20px; color: #555;">Ward404 CTF — Óscar Pérez Fernández · 2025</p>
       <div class="nav-buttons">
         <a class="btn" href="intro.html">← Volver a Inicio</a>
       </div>
